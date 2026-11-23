@@ -5,11 +5,13 @@ import { Component, ChangeDetectionStrategy, OnInit, OnChanges } from '@angular/
     selector: 'app-example-league-simulation',
     templateUrl: './example-league-simulation.component.html',
     styleUrls: ['./example-league-simulation.component.scss', '../../styles/epl-emblems.scss', '../../styles/champions-league-logos.scss'],
-    // changeDetection: ChangeDetectionStrategy.OnPush,
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class ExampleLeagueSimulationComponent implements OnInit {
     data = DATA;
     day = 1;
+    checked = true;
     letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 
     groups = [];

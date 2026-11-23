@@ -4,12 +4,13 @@
     <select
       [(ngModel)]="selectedSeason"
       (change)="onSeasonChange($event.target.value);">
-      <option
-        *ngFor="let season of seasons;"
-        [value]="season"
-        [selected]="season === 19">
-        {{ getSeason(season) }}
-      </option>
+      @for (season of seasons; track season) {
+        <option
+          [value]="season"
+          [selected]="season === 19">
+          {{ getSeason(season) }}
+        </option>
+      }
     </select>
     <h5>PROGRESS DAY BY DAY</h5>
     <select (change)="onChartChange($event.target.value)">
@@ -20,45 +21,48 @@
 </div>
 
 <div class="buttons checkbox-btn-group checkbox-selection-group">
-  <div
-    *ngFor="let team of DATA; let i = index;"
-    [ngClass]="format(team.club)">
-    <input
-      type="checkbox"
-      [checked]="i === 0 ? true : false"
-      name="radio"
-      [value]="'button_'+(i+1)"
-      [id]="'button_'+(i+1)"
-      (click)="onClick(i)">
-    <label [for]="'button_'+(i+1)">{{team.club}}</label>
+  @for (team of DATA; track team; let i = $index) {
+    <div
+      [ngClass]="format(team.club)">
+      <input
+        type="checkbox"
+        [checked]="i === 0"
+        name="radio"
+        [value]="'button_'+(i+1)"
+        [id]="'button_'+(i+1)"
+        (click)="onClick(i)">
+        <label [for]="'button_'+(i+1)">{{team.club}}</label>
+      </div>
+    }
   </div>
-</div>
 
-<div class="chart-container">
-  <app-chart>
-    <app-chart-series
-      *ngFor="let zone of zones; let i = index;"
-      type="rect"
-      [range]="range"
-      [data]="[[0,39], zones[i]]"
-      [style]="rectStyle(i)">
-    </app-chart-series>
-    <app-chart-series
-      *ngFor="let team of DATA; let i = index;"
-      type="line"
-      [style]="getStyle(i)"
-      [data]="data[i]"
-      [range]="range">
-    </app-chart-series>
-    <app-chart-x-axis
-      [range]="range?.x"
-      [ticks]="ticksX">
-    </app-chart-x-axis>
-    <app-chart-y-axis
-      [range]="range?.y"
-      [ticks]="ticksY"
-      [reverse]="reverse">
-    </app-chart-y-axis>
-    <app-chart-plot [margin]="margin"></app-chart-plot>
-  </app-chart>
-</div>
+  <div class="chart-container">
+    <app-chart>
+      @for (zone of zones; track zone; let i = $index) {
+        <app-chart-series
+          type="rect"
+          [range]="range"
+          [data]="[[0,39], zones[i]]"
+          [style]="rectStyle(i)">
+        </app-chart-series>
+      }
+      @for (team of DATA; track team; let i = $index) {
+        <app-chart-series
+          type="line"
+          [style]="getStyle(i)"
+          [data]="data[i]"
+          [range]="range">
+        </app-chart-series>
+      }
+      <app-chart-x-axis
+        [range]="$safeNavigationMigration(range?.x)"
+        [ticks]="ticksX">
+      </app-chart-x-axis>
+      <app-chart-y-axis
+        [range]="$safeNavigationMigration(range?.y)"
+        [ticks]="ticksY"
+        [reverse]="reverse">
+      </app-chart-y-axis>
+      <app-chart-plot [margin]="margin"></app-chart-plot>
+    </app-chart>
+  </div>

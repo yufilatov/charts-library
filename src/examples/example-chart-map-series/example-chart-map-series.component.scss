@@ -1,5 +1,33 @@
 .title {
   display: flex;
+  align-items: center;
+}
+
+.levels {
+  display: flex;
+  margin-left: 16px;
+
+  button {
+    border: 1px solid #000;
+    background: #fff;
+    padding: 4px 10px;
+    cursor: pointer;
+    font-size: 12px;
+
+    &.active {
+      background: #4c3100;
+      color: #fff;
+    }
+
+    &:disabled {
+      opacity: 0.45;
+      cursor: default;
+    }
+  }
+
+  button + button {
+    margin-left: 6px;
+  }
 }
 
 .app-chart {
@@ -114,16 +142,17 @@
     float: left;
     margin: 0px 5px 5px 5px;
     font-size: 14px;
-    width: 120px;
+    width: 110px;
     letter-spacing: 0.2px;
     font-weight: normal;
     color: #000;
+    overflow-wrap: anywhere;
   }
 }
 
 h5 {
   margin: 0;
-  width: 240px;
+  width: 280px;
 }
 
 .legend .legend-scale ul {
@@ -148,42 +177,8 @@ h5 {
   width: 50px;
 }
 
-.legend-labels {
-  li {
-    &:first-child {
-      > span {
-        background: rgb(180, 149, 91);
-      }
-    }
-  }
-  li {
-    &:nth-child(2) {
-      > span {
-        background: rgb(154, 124, 68);
-      }
-    }
-  }
-  li {
-    &:nth-child(3) {
-      > span {
-        background: rgb(128, 99, 45);
-      }
-    }
-  }
-  li {
-    &:nth-child(4) {
-      > span {
-        background: rgb(102, 74, 23);
-      }
-    }
-  }
-  li {
-    &:nth-child(5) {
-      > span {
-        background: rgb(76, 49, 0);
-      }
-    }
-  }
+.legend-labels li span {
+  background: #c1a166;
 }
 
 .legend {

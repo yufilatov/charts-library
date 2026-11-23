@@ -1,12 +1,21 @@
-import { enableProdMode } from '@angular/core';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
+import { enableProdMode, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
+import { bootstrapApplication } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 
-import { AppModule } from './app/app.module';
+import { AppComponent } from './app/app.component';
+import { routes } from './app/app-routing.module';
 import { environment } from './environments/environment';
+import { ExampleChartsModule } from 'src/examples/example-charts.module';
+import { PagesModule } from 'src/pages/pages.module';
 
 if (environment.production) {
     enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(AppModule)
-    .catch(err => console.error(err));
+bootstrapApplication(AppComponent, {
+    providers: [
+        provideZoneChangeDetection(),
+        provideRouter(routes),
+        importProvidersFrom(ExampleChartsModule, PagesModule),
+    ],
+}).catch(err => console.error(err));

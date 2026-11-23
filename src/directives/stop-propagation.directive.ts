@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 
 @Directive({
     selector: '[appStopPropagation]',
+    standalone: false
 })
 export class StopPropagationDirective implements OnInit {
     @Input() events: string | string[];

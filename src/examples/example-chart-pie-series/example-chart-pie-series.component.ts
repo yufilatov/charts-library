@@ -8,6 +8,7 @@ import { DATA } from './data';
     templateUrl: './example-chart-pie-series.component.html',
     styleUrls: ['./example-chart-pie-series.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ExampleChartPieSeriesComponent {
     data = DATA;

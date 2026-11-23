@@ -15,6 +15,7 @@ import { ChartStyleBuilder } from '../../chart-style/chart-style.builder';
     changeDetection: ChangeDetectionStrategy.OnPush,
     // tslint:disable-next-line:use-view-encapsulation
     encapsulation: ViewEncapsulation.None,
+    standalone: true
 })
 export class LineSeriesChartComponent implements OnChanges {
     @Input() data: any[];

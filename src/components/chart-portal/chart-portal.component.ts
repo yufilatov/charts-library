@@ -6,6 +6,7 @@ import { ChartPortalPositionStrategy } from './chart-portal-position.strategy';
     templateUrl: './chart-portal.component.html',
     styleUrls: ['./chart-portal.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ChartPortalComponent {
     link: { templateRef: TemplateRef<any>, context: any };

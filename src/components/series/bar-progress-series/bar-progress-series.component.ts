@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input, SimpleChanges, OnChanges, ChangeDetectionStrategy } from '@angular/core';
 import { ChartStyleBuilder } from '../../chart-style/chart-style.builder';
 import { ChartComponent } from '../../chart/chart.component';
 import { ChartDisposable } from '../../common/chart-disposable';
@@ -12,6 +12,8 @@ import { BarProgressSeriesChartService } from './bar-progress-series.service';
         BarProgressSeriesChartService,
         ChartDisposable,
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: true
 })
 export class BarProgressSeriesChartComponent implements OnChanges {
     @Input() data: any[];

@@ -4,6 +4,10 @@ import { ChartComponent } from 'src/components/chart/chart.component';
 import { ChartDisposable } from 'src/components/common/chart-disposable';
 import { AreaSeriesChartService } from './area-series.service';
 
+export interface Point {
+    x: number;
+    y: number;
+}
 @Component({
     selector: 'app-chart-series[type="area"]',
     template: '',
@@ -13,10 +17,11 @@ import { AreaSeriesChartService } from './area-series.service';
         ChartDisposable,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true
 })
 export class AreaSeriesChartComponent implements OnChanges {
     @Input() curveType = 'curveMonotoneX';
-    @Input() data: any[];
+    @Input() data: Point[];
     @Input() range: { x: number[], y: number[] } = { x: [], y: [] };
     @Input() style = new ChartStyleBuilder();
 

@@ -1,5 +1,13 @@
+// :host {
+//     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+//     letter-spacing: 1px;
+// }
 
-:host {
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    letter-spacing: 1px;
+body {
+    margin: 0;
+}
+
+@font-face {
+    font-family: "Basic";
+    src: url('assets/fonts/novarese.ttf');
 }

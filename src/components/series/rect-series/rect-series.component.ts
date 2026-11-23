@@ -12,6 +12,7 @@ import { ChartStyleBuilder } from '../../chart-style/chart-style.builder';
         ChartDisposable,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true
 })
 export class RectSeriesChartComponent implements OnChanges {
     @Input() data: any[];

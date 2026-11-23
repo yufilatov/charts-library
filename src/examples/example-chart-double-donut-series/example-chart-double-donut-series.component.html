@@ -11,19 +11,21 @@
 </div>
 
 <div class="chart-container">
-  <div
-    class="item"
-    *ngFor="let chart of data; let i=index">
-    <div class="title">{{chart.club}}</div>
-    <app-chart>
-      <app-chart-series
-        type="double-donut"
-        [style]="style"
-        [data]="[[chart.for.home, chart.for.away], [chart.against.home, chart.against.away]]">
-      </app-chart-series>
-    </app-chart>
-    <div class="title">
-      {{chart.for.home}} {{chart.for.away}} | {{chart.against.home}} {{chart.against.away}}
+  @for (chart of data; track chart; let i = $index) {
+    <div
+      class="item"
+      >
+      <div class="title">{{chart.club}}</div>
+      <app-chart>
+        <app-chart-series
+          type="double-donut"
+          [style]="style"
+          [data]="[[chart.for.home, chart.for.away], [chart.against.home, chart.against.away]]">
+        </app-chart-series>
+      </app-chart>
+      <div class="title">
+        {{chart.for.home}} {{chart.for.away}} | {{chart.against.home}} {{chart.against.away}}
+      </div>
     </div>
-  </div>
+  }
 </div>

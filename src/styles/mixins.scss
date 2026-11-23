@@ -3,7 +3,7 @@
 }
 
 @mixin club-logo-cl($name) {
-    background-image: url('/assets/images/champions-league-logos/#{$name}-logo.png');
+    background-image: url('/assets/images/champions-league-logos/#{$name}.png');
 }
 
 @mixin land-logo($name) {

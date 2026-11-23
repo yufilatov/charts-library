@@ -8,6 +8,7 @@ import { ChartStyleBuilder } from 'src/components/chart-style/chart-style.builde
     templateUrl: './example-chart-double-donut-series.component.html',
     styleUrls: ['./example-chart-double-donut-series.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ExampleChartDoubleDonutSeriesComponent {
     data = DATA;

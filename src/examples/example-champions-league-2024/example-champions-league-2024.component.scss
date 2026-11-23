@@ -1,0 +1,289 @@
+:host {
+    .pot {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        ul {
+            >li {
+                display: flex;
+                align-items: center;
+                padding: 3px 0px;
+            }
+        }
+    }
+
+    .pots {
+        display: flex;
+        padding-bottom: 10px;
+        gap: 20px;
+    }
+
+    .logo {
+        width: 25px;
+        height: 25px;
+        margin-right: 5px;
+    }
+}
+
+.pots {
+    width: 100%;
+
+    ul {
+        margin: 0 0 0 20px;
+        padding: 5px 5px 5px 0;
+    }
+
+    .column {
+        width: 300px;
+        border: 1px solid black;
+        padding: 5px;
+        margin: 2.5px;
+    }
+
+    .fixtures {
+        width: 450px;
+        border: 1px solid black;
+        padding: 5px;
+        margin: 2.5px;
+
+        ol {
+            list-style: none;
+            padding: 0;
+
+            li {
+                margin: 2px 0;
+            }
+        }
+    }
+}
+
+h4 {
+    margin: 0 0 5px 0;
+}
+
+.groups {
+    display: flex;
+    width: 1100px;
+    flex-wrap: wrap;
+    padding: 15px 0;
+
+    >div {
+        width: 250px;
+        border: 1px solid black;
+        padding: 5px;
+        margin: 2.5px;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+            margin: 2px 0;
+            align-items: center;
+            display: flex;
+        }
+    }
+
+    h5 {
+        margin: 5px 0 5px 0;
+    }
+
+    table {
+        tr {
+
+            td:nth-child(2),
+            td:nth-child(3) {
+                text-align: center;
+            }
+        }
+
+        tr:first-child {
+            td {
+                font-weight: 600;
+                font-size: 12px;
+            }
+        }
+
+        tr:nth-child(2),
+        tr:nth-child(3) {
+            td {
+                color: green;
+            }
+        }
+
+        tr {
+            td:first-child {
+                width: 225px;
+                padding-right: 10px;
+            }
+        }
+    }
+}
+
+button {
+    font-size: 20px;
+    margin: 10px 10px;
+    padding: 10px 25px;
+}
+
+.drawing {
+    display: inline-block;
+    margin: 0 0 10px 8px;
+    font-style: italic;
+}
+
+tr.active td {
+    background-color: #fff6d8;
+}
+
+td.revealed {
+    animation: draw-in 0.55s ease;
+}
+
+@keyframes draw-in {
+    0% {
+        background-color: #ffd56a;
+        opacity: 0.15;
+    }
+
+    100% {
+        background-color: transparent;
+        opacity: 1;
+    }
+}
+
+.comment {
+    font-style: italic;
+    color: green;
+}
+
+.playoff {
+    ul {
+        width: 1000px;
+        list-style: none;
+        padding: 0;
+
+        li {
+            display: flex;
+            align-items: center;
+            padding: 2.5px 0;
+        }
+
+        span.winner {
+            font-weight: 700;
+        }
+
+        li:nth-child(even) {
+            border-bottom: 1px solid rgb(85, 73, 73);
+        }
+    }
+}
+
+h6 {
+    font-style: italic;
+    margin: 5px 0;
+}
+
+.logo,
+.badge {
+    width: 25px;
+    height: 25px;
+    margin-right: 5px;
+    display: inline-flex;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    flex-shrink: 0;
+}
+
+.badge {
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #1a1a2e;
+    color: #fff;
+    font-size: 8px;
+    font-weight: 700;
+}
+
+.score {
+    padding: 0 5px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.results-title {
+    margin-top: 20px;
+}
+
+.matches {
+    td:nth-child(2) {
+        width: 90px;
+    }
+
+    td.winner {
+        font-weight: 700;
+    }
+}
+
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+table {
+    width: 100%;
+
+    td {
+        padding: 5px;
+    }
+}
+
+.bands {
+    display: flex;
+    gap: 12px;
+    margin: 16px 0 0;
+
+    span {
+        padding: 2px 8px;
+    }
+
+    .direct {
+        background-color: #bbf3bb;
+    }
+
+    .playoff {
+        background-color: #bbf3ff;
+    }
+
+    .out {
+        background-color: #f6d0d0;
+    }
+}
+
+.table {
+    margin-top: 20px;
+
+    tr {
+        td {
+            margin-bottom: 10px;
+        }
+    }
+
+    tr.direct {
+        background-color: #bbf3bb;
+    }
+
+    tr.playoff {
+        background-color: #bbf3ff;
+    }
+
+    tr.out {
+        background-color: #f6d0d0;
+    }
+}

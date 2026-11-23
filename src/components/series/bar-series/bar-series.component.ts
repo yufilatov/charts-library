@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges, OnChanges, Output } from '@angular/core';
+import { Component, Input, SimpleChanges, OnChanges, Output, ChangeDetectionStrategy } from '@angular/core';
 import { ChartStyleBuilder } from '../../chart-style/chart-style.builder';
 import { ChartComponent } from '../../chart/chart.component';
 import { ChartDisposable } from '../../common/chart-disposable';
@@ -13,6 +13,8 @@ import { BarHorizontalSeriesChartService } from './bar-series-horizontal.service
         BarVerticalSeriesChartService,
         BarHorizontalSeriesChartService,
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: true
 })
 export class BarSeriesChartComponent implements OnChanges {
     @Input() data: any[];

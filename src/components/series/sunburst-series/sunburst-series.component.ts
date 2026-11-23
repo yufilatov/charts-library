@@ -14,6 +14,7 @@ import { SunburstSeriesChartService } from './sunburst-series.service';
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
+    standalone: true
 })
 export class SunburstSeriesChartComponent implements OnChanges {
     @Input() data: any[];

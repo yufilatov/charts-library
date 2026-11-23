@@ -34,15 +34,17 @@ export class MapSeriesChartService {
     }
 
     setState(state: IChartSeriesState) {
-        const { rect, style } = state;
+        const { rect, style, data } = state;
 
         if (!rect.height || !rect.width) {
             return;
         }
 
+        const collection = this.featureCollection(data);
+
         this.root.selectAll('path').remove();
 
-        const bounds = d3.geoBounds(DATA);
+        const bounds = d3.geoBounds(collection);
         const bottomLeft = bounds[0];
         const topRight = bounds[1];
         const rotLong = -(topRight[0] + bottomLeft[0]) / 2;
@@ -68,7 +70,7 @@ export class MapSeriesChartService {
         const path = d3.geoPath()
             .projection(projection);
 
-        const datum = DATA.features;
+        const datum = collection.features;
 
         const pathStyle = style.compile(ChartStyle.arc);
 
@@ -86,26 +88,38 @@ export class MapSeriesChartService {
                     .attr('fill', (d, i) => pathStyle(d, i).fill)
                     .attr('stroke-width', (d, i) => pathStyle(d, i).strokeWidth)
                     .attr('stroke', (d, i) => pathStyle(d, i).stroke)
-                    .on('mouseover', (d, i) => {
+                    .on('mouseover', (event, d) => {
                         this.root
                             .selectAll('.chart-map-series-land')
                             .filter(a => a === d)
                             .transition()
                             .delay(100)
-                            .attr('fill', pathStyle(d, i).fillHover);
+                            .attr('fill', (datum, i) => pathStyle(datum, i).fillHover);
 
                         this.mouseover.emit(d);
                     })
-                    .on('mouseleave', (d, i) => {
+                    .on('mouseleave', (event, d) => {
                         this.root
                             .selectAll('.chart-map-series-land')
                             .filter(a => a === d)
                             .transition()
                             .delay(100)
-                            .attr('fill', pathStyle(d, i).fill);
+                            .attr('fill', (datum, i) => pathStyle(datum, i).fill);
 
                         this.mouseleave.emit();
                     }),
         });
+    }
+
+    private featureCollection(data: any) {
+        if (data?.type === 'FeatureCollection' && data.features?.length) {
+            return data;
+        }
+
+        if (Array.isArray(data) && data.length) {
+            return { type: 'FeatureCollection', features: data };
+        }
+
+        return DATA;
     }
 }

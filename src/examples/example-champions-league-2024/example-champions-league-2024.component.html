@@ -1,0 +1,167 @@
+<h4>Champions League 2024/2025 Simulation</h4>
+
+<div class="pots">
+    @for (pot of pots | keyvalue; track pot) {
+        <div class="pot">
+            Pot {{ pot.key }}
+            <ul>
+                @for(team of sortData(pot.key); track team) {
+                    <li>
+                        @if (team.logo) {
+                            <img class="logo" [src]="team.logo" [alt]="team.name"/>
+                        } @else {
+                            <span class="badge">{{ team.shortName }}</span>
+                        }
+                        {{ team.name }} ({{ team.shortCountryName }})
+                    </li>
+                }
+            </ul>
+        </div>
+    }
+</div>
+
+<button [disabled]="isDraw || drawing" (click)="draw()">DRAW</button>
+<button [disabled]="!isDraw || drawing || played" (click)="play()">PLAY</button>
+<button [disabled]="!played || knockout" (click)="simulateKnockout()">PLAYOFF</button>
+@if (drawing) {
+    <p class="drawing">Drawing opponents…</p>
+}
+
+@if(table) {
+    <table>
+        <tr>
+            <td>Team</td>
+            @for(pot of pots | keyvalue; track pot) {
+                <td>POT {{pot.key}} HOME</td>
+                <td>POT {{pot.key}} AWAY</td>
+            }
+        </tr>
+        @for(team of table | keyvalue : returnZero; track team.key; let index = $index; let last = $last) {
+            <tr [id]="'draw-team-' + team.key" [class.active]="activeTeamId === +team.key">
+                <td>{{team.value['team']?.name}}</td>
+                @for(pot of pots | keyvalue; track pot; let index = $index) {
+                    <td [class.revealed]="team.value['home'][index]">{{team.value['home'][index]?.name}}</td>
+                    <td [class.revealed]="team.value['away'][index]">{{team.value['away'][index]?.name}}</td>
+                }
+            </tr>
+            @if((index + 1) % 9 === 0 && !last) {
+                <tr><td colspan="100%"></td></tr>
+            }
+        }
+    </table>
+}
+
+@if(played) {
+    @for(day of matchdays; track day; let dayIndex = $index) {
+        <h4 class="results-title">Matchday {{ dayIndex + 1 }}</h4>
+        <table class="matches">
+            <tr>
+                <td>Home</td>
+                <td>Score</td>
+                <td>Away</td>
+            </tr>
+            @for(match of day; track match.fixture) {
+                <tr>
+                    <td [class.winner]="match.homeScore > match.awayScore">{{ match.teams[0].name }}</td>
+                    <td class="score">{{ match.homeScore }} : {{ match.awayScore }}</td>
+                    <td [class.winner]="match.awayScore > match.homeScore">{{ match.teams[1].name }}</td>
+                </tr>
+            }
+        </table>
+    }
+}
+
+@if(copy) {
+    @if(played) {
+        <p class="bands">
+            <span class="direct">1–8 Round of 16</span>
+            <span class="playoff">9–24 Play-off</span>
+            <span class="out">25–36 Eliminated</span>
+        </p>
+    }
+    <table class="table">
+        <tr>
+            <td>Position</td>
+            <td>Team</td>
+            <td>Played</td>
+            <td>Won</td>
+            <td>Drawn</td>
+            <td>Lost</td>
+            <td>For</td>
+            <td>Against</td>
+            <td>Goal difference</td>
+            <td>Points</td>
+        </tr>
+        @for(team of copy | keyvalue: returnZero; track team; let index = $index) {
+            <tr [class.direct]="played && index < 8" [class.playoff]="played && index >= 8 && index < 24" [class.out]="played && index >= 24">
+                <td>{{index + 1}}</td>
+                <td>{{team.value['team'].name}}</td>
+                <td>{{team.value['played'] || 0}}</td>
+                <td>{{team.value['won'] || 0}}</td>
+                <td>{{team.value['drawn'] || 0}}</td>
+                <td>{{team.value['lost'] || 0}}</td>
+                <td>{{team.value['for'] || 0}}</td>
+                <td>{{team.value['against'] || 0}}</td>
+                <td>{{(team.value['for'] - team.value['against']) || 0}}</td>
+                <td>{{team.value['points'] || 0}}</td>
+            </tr>
+        }
+    </table>
+}
+
+@if(knockout) {
+    <h4 class="results-title">Knockout play-off</h4>
+    <div class="playoff">
+        <ng-container *ngTemplateOutlet="ties; context: { $implicit: knockout.playoff }"></ng-container>
+    </div>
+
+    <h4 class="results-title">Round of 16</h4>
+    <div class="playoff">
+        <ng-container *ngTemplateOutlet="ties; context: { $implicit: knockout.roundOf16 }"></ng-container>
+    </div>
+
+    <h4 class="results-title">Quarter-finals</h4>
+    <div class="playoff">
+        <ng-container *ngTemplateOutlet="ties; context: { $implicit: knockout.quarterFinals }"></ng-container>
+    </div>
+
+    <h4 class="results-title">Semi-finals</h4>
+    <div class="playoff">
+        <ng-container *ngTemplateOutlet="ties; context: { $implicit: knockout.semiFinals }"></ng-container>
+    </div>
+
+    <h4 class="results-title">Final</h4>
+    <div class="playoff">
+        <ng-container *ngTemplateOutlet="ties; context: { $implicit: [knockout.final] }"></ng-container>
+    </div>
+
+    <h4 class="results-title">Champion: {{ knockout.winner.name }}</h4>
+}
+
+<ng-template #ties let-round>
+    <ul>
+        @for (tie of round; track tie.winner.id) {
+            @for (match of tie.matches; track $index) {
+                <li>
+                    @if (match.team1.logo) {
+                        <img class="logo" [src]="match.team1.logo" [alt]="match.team1.name"/>
+                    } @else {
+                        <span class="badge">{{ match.team1.shortName }}</span>
+                    }
+                    <span [class.winner]="match.winner?.id === match.team1.id">{{ match.team1.name }}</span>
+                    <span class="score">{{ match.score[0] }}</span> :
+                    <span class="score">{{ match.score[1] }}</span>
+                    <span [class.winner]="match.winner?.id === match.team2.id">{{ match.team2.name }}</span>
+                    @if (match.team2.logo) {
+                        <img class="logo" [src]="match.team2.logo" [alt]="match.team2.name"/>
+                    } @else {
+                        <span class="badge">{{ match.team2.shortName }}</span>
+                    }
+                    @if (match.comment) {
+                        <span class="comment">{{ match.comment }}</span>
+                    }
+                </li>
+            }
+        }
+    </ul>
+</ng-template>

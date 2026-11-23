@@ -9,6 +9,7 @@ import { CHART_MARGIN_EMPTY, IChartMargin } from '../common/chart-margin';
     styleUrls: [],
     providers: [ChartDisposable],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true
 })
 export class ChartPlotComponent implements OnChanges {
     @Input() margin: IChartMargin = CHART_MARGIN_EMPTY;

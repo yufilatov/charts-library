@@ -4,11 +4,11 @@ import { IChartLabelStyle, ChartStyle } from '../chart-style/chart-style';
 import { NgClass } from '@angular/common';
 @Component({
     selector: 'app-chart-breadcrumb',
-    standalone: true,
     templateUrl: './breadcrumb.component.html',
     styleUrls: ['./breadcrumb.component.scss'],
-    imports: [ NgClass ],
+    imports: [NgClass],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true
 })
 export class BreadcrumbChartComponent {
     @HostBinding('class.chart-breadcrumb') hostClass = true;

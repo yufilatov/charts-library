@@ -9,21 +9,23 @@
       <div class="away"></div>
       <h5>AWAY</h5>
     </div>
-    <div
-      class="chart-container"
-      *ngFor="let club of (dataFor$ | async); let i = index">
-      <div class="title">{{clubs[i]}}</div>
-      <div class="chart">
-        <app-chart>
-          <app-chart-series
-            type="bar-simple"
-            [data]="club"
-            [style]="styleFor">
-          </app-chart-series>
-        </app-chart>
+    @for (club of (dataFor$ | async); track club; let i = $index) {
+      <div
+        class="chart-container"
+        >
+        <div class="title">{{clubs[i]}}</div>
+        <div class="chart">
+          <app-chart>
+            <app-chart-series
+              type="bar-simple"
+              [data]="club"
+              [style]="styleFor">
+            </app-chart-series>
+          </app-chart>
+        </div>
+        <div class="total">{{club[0] + club[1]}}</div>
       </div>
-      <div class="total">{{club[0] + club[1]}}</div>
-    </div>
+    }
   </div>
 
   <div class="chart-column">
@@ -34,20 +36,22 @@
       <div class="away"></div>
       <h5>AWAY</h5>
     </div>
-    <div
-      class="chart-container"
-      *ngFor="let club of (dataAgainst$ | async); let i = index">
-      <div class="title">{{clubs[i]}}</div>
-      <div class="chart">
-        <app-chart>
-          <app-chart-series
-            type="bar-simple"
-            [data]="club"
-            [style]="styleAgainst">
-          </app-chart-series>
-        </app-chart>
+    @for (club of (dataAgainst$ | async); track club; let i = $index) {
+      <div
+        class="chart-container"
+        >
+        <div class="title">{{clubs[i]}}</div>
+        <div class="chart">
+          <app-chart>
+            <app-chart-series
+              type="bar-simple"
+              [data]="club"
+              [style]="styleAgainst">
+            </app-chart-series>
+          </app-chart>
+        </div>
+        <div class="total">{{club[0] + club[1]}}</div>
       </div>
-      <div class="total">{{club[0] + club[1]}}</div>
-    </div>
+    }
   </div>
 </div>

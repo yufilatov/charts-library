@@ -30,25 +30,25 @@
           }
           @if($context.data.group) {
             <dl>
-              <ng-container *ngFor="let land of $context.data.children; let i = index">
+              @for (land of $context.data.children; track land; let i = $index) {
                 <dt>
                   @if(i===0) { Lands: }
-                </dt>
-                <dd>{{ land.name }}</dd>
-              </ng-container>
-            </dl>
-          }
-        </div>
-      </ng-template>
-    </app-chart-popup>
-    <app-chart-breadcrumb
-      appStopPropagation
-      events="click"
-      [path]="breadcrumb"
-      [style]="breadcrumbStyle"
-      (selectionChange)="onBreadcrumbChange($event)"
-      [selection]="selection[0]"
-      [format]="formatBreadcrumb">
-    </app-chart-breadcrumb>
-  </app-chart>
-</div>
+                  </dt>
+                  <dd>{{ land.name }}</dd>
+                }
+              </dl>
+            }
+          </div>
+        </ng-template>
+      </app-chart-popup>
+      <app-chart-breadcrumb
+        appStopPropagation
+        events="click"
+        [path]="breadcrumb"
+        [style]="breadcrumbStyle"
+        (selectionChange)="onBreadcrumbChange($event)"
+        [selection]="selection[0]"
+        [format]="formatBreadcrumb">
+      </app-chart-breadcrumb>
+    </app-chart>
+  </div>

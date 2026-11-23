@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ViewEncapsulation, Input, Output } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { ChartDisposable } from '../../common/chart-disposable';
 import { ChartComponent } from '../../chart/chart.component';
 import { ChartStyleBuilder } from '../../chart-style/chart-style.builder';
@@ -14,9 +14,10 @@ import { MapSeriesChartService } from './map-series.service';
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
+    standalone: true
 })
-export class MapSeriesChartComponent {
-    @Input() data: any[];
+export class MapSeriesChartComponent implements OnChanges {
+    @Input() data: any;
     @Input() style = new ChartStyleBuilder();
 
     @Output() get onHover() {
@@ -35,6 +36,12 @@ export class MapSeriesChartComponent {
         const rectChange = chart.rectChange.subscribe(() => this.invalidate());
 
         this.disposable.add(() => rectChange.unsubscribe());
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (changes.data || changes.style) {
+            this.invalidate();
+        }
     }
 
     private invalidate() {

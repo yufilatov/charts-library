@@ -1,9 +1,9 @@
 import * as d3 from 'd3';
 import { DATA } from './data';
 import { findDescendants, convertUmlauts } from 'src/components/kit';
-import { ChartStyle } from 'src/components/chart-style/chart-style';
-import { Component } from '@angular/core';
-import { ChartStyleBuilder } from 'src/components/chart-style/chart-style.builder';
+import { ChartStyle } from '../../components/chart-style/chart-style';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { ChartStyleBuilder } from '../../components/chart-style/chart-style.builder';
 
 @Component({
     selector: 'app-example-chart-sunburst',
@@ -12,6 +12,8 @@ import { ChartStyleBuilder } from 'src/components/chart-style/chart-style.builde
         './example-chart-sunburst-series.component.scss',
         '../../styles/germany-lands-logos.scss',
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class ExampleChartSunburstSeriesComponent {
     constructor() { }

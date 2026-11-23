@@ -63,6 +63,8 @@ export class BarVerticalSeriesChartService {
             data: datum,
         });
 
+        console.log(datum)
+
         const scaleY = createScaleY('linear', {
             ...state as IChartSeriesState,
             data: range.y,
@@ -108,7 +110,6 @@ export class BarVerticalSeriesChartService {
                         .attr('y', (d, c) => scaleY(d3.max(range.y)) - scaleY(d) + scaleY(0))
                         .attr('fill', (d, c) => barStyle(d, c).fill)
                         .on('mouseover', (d, c) => {
-                            console.log('Hovered Vertical');
                             this.selectionChange.emit();
                         }),
             });

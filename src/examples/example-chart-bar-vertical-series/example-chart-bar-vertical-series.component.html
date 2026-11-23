@@ -4,12 +4,13 @@
     <select
       [(ngModel)]="selectedSeason"
       (change)="onSeasonChange(); updateData(inputScored.checked, inputConceded.checked)">
-      <option
-        *ngFor="let season of seasons;"
-        [value]="season"
-        [selected]="season === 19">
-        {{ getSeason(season) }}
-      </option>
+      @for (season of seasons; track season) {
+        <option
+          [value]="season"
+          [selected]="season === 19">
+          {{ getSeason(season) }}
+        </option>
+      }
     </select>
     <h5>GOALS STATISTICS: </h5>
   </div>
@@ -20,67 +21,68 @@
         type="checkbox"
         checked="true"
         (change)="updateData($event.target.checked, inputConceded.checked);">
-      Scored
-    </div>
-    <div>
-      <input
-        #inputConceded
-        type="checkbox"
-        (change)="updateData(inputScored.checked, $event.target.checked);">
-      Conceded
-    </div>
-  </div>
-</div>
-
-<div class="dropdowns">
-  <div style="display: flex;align-items: center;">
-    <h5>SORT BY </h5>
-    <select
-      #selectSortBy
-      [(ngModel)]="selectedSortBy"
-      (change)="onSortChange(); updateData(inputScored.checked, inputConceded.checked)">
-      <option
-        *ngFor="let sort of sorts; let i = index"
-        [value]="sort"
-        [selected]="sort === 'Position'">
-        {{ sort | uppercase }}
-      </option>
-    </select>
-  </div>
-</div>
-
-<div>
-  <app-chart>
-    <app-chart-series
-      type="bar"
-      orientation="vertical"
-      [data]="data$ | async"
-      [range]="range"
-      [style]="style">
-    </app-chart-series>
-    <app-chart-series
-      type="grid"
-      [step]="gridStep"
-      [style]="gridStyle"
-      [range]="range">
-    </app-chart-series>
-    <app-chart-x-axis
-      [range]="range.x"
-      [ticks]="ticksX">
-    </app-chart-x-axis>
-    <app-chart-y-axis
-      [range]="range.y"
-      [ticks]="ticksY">
-    </app-chart-y-axis>
-    <app-chart-plot [margin]="margin"></app-chart-plot>
-  </app-chart>
-
-  <div style="padding-left: 58.5px;width: 1200px;display: inline-flex;">
-    <ng-container *ngFor="let club of (clubs$ | async)">
-      <div style="display:flex; flex-direction: column;font-size: 9px;text-align: center;">
-        <div [ngClass]="getLogo(club.club)"></div>
-        <div style="width: 53.8px">{{club.twoLinesName}}</div>
+        Scored
       </div>
-    </ng-container>
+      <div>
+        <input
+          #inputConceded
+          type="checkbox"
+          (change)="updateData(inputScored.checked, $event.target.checked);">
+          Conceded
+        </div>
+      </div>
+    </div>
+
+    <div class="dropdowns">
+      <div style="display: flex;align-items: center;">
+        <h5>SORT BY </h5>
+        <select
+          #selectSortBy
+          [(ngModel)]="selectedSortBy"
+          (change)="onSortChange(); updateData(inputScored.checked, inputConceded.checked)">
+          @for (sort of sorts; track sort; let i = $index) {
+            <option
+              [value]="sort"
+              [selected]="sort === 'Position'">
+              {{ sort | uppercase }}
+            </option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div>
+      <app-chart>
+        <app-chart-series
+          type="bar"
+          orientation="vertical"
+          [data]="data$ | async"
+          [range]="range"
+          [style]="style">
+        </app-chart-series>
+        <app-chart-series
+          type="grid"
+          [step]="gridStep"
+          [style]="gridStyle"
+          [range]="range">
+        </app-chart-series>
+        <app-chart-x-axis
+          [range]="range.x"
+          [ticks]="ticksX">
+        </app-chart-x-axis>
+        <app-chart-y-axis
+          [range]="range.y"
+          [ticks]="ticksY">
+        </app-chart-y-axis>
+        <app-chart-plot [margin]="margin"></app-chart-plot>
+      </app-chart>
+
+      <!-- <div style="padding-left: 58.5px;width: 1200px;display: inline-flex;">
+      <ng-container *ngFor="let club of (clubs$ | async)">
+        <div style="display:flex; flex-direction: column;font-size: 9px;text-align: center;">
+          <div [ngClass]="getLogo(club.club)"></div>
+          <div style="width: 53.8px">{{club.twoLinesName}}</div>
+        </div>
+      </ng-container>
+    </div> -->
   </div>
-</div>

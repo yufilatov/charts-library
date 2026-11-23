@@ -1,11 +1,15 @@
 <div class="title">
-    <h5>GERMANY POPULATION 2018</h5>
+    <h5>{{ level === 'district' ? 'GERMANY DISTRICTS 2025' : 'GERMANY POPULATION 2024' }}</h5>
+    <div class="levels">
+        <button type="button" [class.active]="level === 'state'" (click)="setLevel('state')">Länder</button>
+        <button type="button" [class.active]="level === 'district'" [disabled]="!districts" (click)="setLevel('district')">Landkreise</button>
+    </div>
     <div class="legend">
         <div class="legend-scale">
             <ul class="legend-labels">
-                @for(l of legend; track l) {
+                @for(item of legend; track item.label) {
                     <li>
-                        <span></span>{{l}}M
+                        <span [style.background]="item.color"></span>{{item.label}}
                     </li>
                 }
             </ul>
@@ -17,26 +21,47 @@
     <div class="info">
         @if(show) {
             <div style="width: 100%; display: flex;justify-content: center;">
-                <div [ngClass]="getLogoBig(turbo?.properties?.name)"></div>
+                <div [ngClass]="getLogoBig(logoName(turbo))"></div>
             </div>
-            <dl>
-                <dt>Name:</dt>
-                <dd>{{ turbo?.properties?.name}}</dd>
-                <dt>Capital:</dt>
-                <dd>{{ turbo?.properties?.capital}}</dd>
-                <dt>Head:</dt>
-                <dd>{{ turbo?.properties?.head}}</dd>
-                <dt>Area:</dt>
-                <dd>{{ turbo?.properties?.area }}</dd>
-                <dt>Population:</dt>
-                <dd>{{ turbo?.properties?.population }}</dd>
-                <dt>Density:</dt>
-                <dd>{{ turbo?.properties?.density }}</dd>
-                <dt>Time Zone:</dt>
-                <dd>{{ turbo?.properties?.timeZone }}</dd>
-                <dt>Bundesrat Votes:</dt>
-                <dd>{{ turbo?.properties?.bundesratVotes }}</dd>
-            </dl>
+            @if(level === 'district') {
+                <dl>
+                    <dt>Name:</dt>
+                    <dd>{{ turbo?.properties?.name }}</dd>
+                    <dt>Type:</dt>
+                    <dd>{{ turbo?.properties?.type }}</dd>
+                    <dt>State:</dt>
+                    <dd>{{ turbo?.properties?.state }}</dd>
+                    <dt>Seat:</dt>
+                    <dd>{{ turbo?.properties?.capital || '—' }}</dd>
+                    <dt>Population:</dt>
+                    <dd>{{ turbo?.properties?.population ?? '—' }}</dd>
+                    <dt>Area:</dt>
+                    <dd>{{ turbo?.properties?.area || '—' }}</dd>
+                    <dt>Density:</dt>
+                    <dd>{{ turbo?.properties?.density || '—' }}</dd>
+                    <dt>Plate:</dt>
+                    <dd>{{ turbo?.properties?.kfz || '—' }}</dd>
+                </dl>
+            } @else {
+                <dl>
+                    <dt>Name:</dt>
+                    <dd>{{ turbo?.properties?.name}}</dd>
+                    <dt>Capital:</dt>
+                    <dd>{{ turbo?.properties?.capital}}</dd>
+                    <dt>Head:</dt>
+                    <dd>{{ turbo?.properties?.head}}</dd>
+                    <dt>Area:</dt>
+                    <dd>{{ turbo?.properties?.area }}</dd>
+                    <dt>Population:</dt>
+                    <dd>{{ turbo?.properties?.population }}</dd>
+                    <dt>Density:</dt>
+                    <dd>{{ turbo?.properties?.density }}</dd>
+                    <dt>Time Zone:</dt>
+                    <dd>{{ turbo?.properties?.timeZone }}</dd>
+                    <dt>Bundesrat Votes:</dt>
+                    <dd>{{ turbo?.properties?.bundesratVotes }}</dd>
+                </dl>
+            }
         }
         @else {
             <div style="width: 100%; display: flex;justify-content: center;">
@@ -59,46 +84,58 @@
                 <dd>Euro (€) (EUR)</dd>
                 <dt>Population Rank:</dt>
                 <dd>19</dd>
+                <dt>Population:</dt>
+                <dd>83,577,140</dd>
                 <dt>Density:</dt>
-                <dd>240/km² (57th)</dd>
-                <dt>Growth Rate:</dt>
-                <dd>0.32% (176th)</dd>
-                <dt>World Percentage:</dt>
-                <dd>1.07%</dd>
+                <dd>234/km²</dd>
                 <dt>Land Area:</dt>
-                <dd>348,560 km²</dd>
+                <dd>357,592 km²</dd>
             </dl>
         }
     </div>
   <app-chart>
     <app-chart-series
       type="map"
+      [data]="mapData"
       [style]="style"
       (onHover)="showData($event)"
       (onLeave)="show=false"></app-chart-series>
-    <!-- <app-chart-popup for="map">
+    <app-chart-popup for="map">
       <ng-template let-$context>
         <div class="popup">
           <div class="popup-header">
             <ng-container>
-              <div [ngClass]="getLogo($context.properties?.name)"></div>
+              <div [ngClass]="getLogo(logoName($context))"></div>
             </ng-container>
             <h3 class="chart-popup-title">{{ $context.properties?.name }}</h3>
           </div>
-          <dl class="land">
-            <dt>Area:</dt>
-            <dd>{{ $context.properties?.area }}</dd>
-            <dt>Density:</dt>
-            <dd>{{ $context.properties?.density }}</dd>
-            <dt>Time Zone:</dt>
-            <dd>{{ $context.properties?.timeZone }}</dd>
-            <dt>Bundesrat Votes:</dt>
-            <dd>
-              {{ $context.properties?.bundesratVotes }}
-            </dd>
-          </dl>
+          @if(level === 'district') {
+            <dl class="land">
+              <dt>Type:</dt>
+              <dd>{{ $context.properties?.type }}</dd>
+              <dt>State:</dt>
+              <dd>{{ $context.properties?.state }}</dd>
+              <dt>Population:</dt>
+              <dd>{{ $context.properties?.population ?? '—' }}</dd>
+              <dt>Density:</dt>
+              <dd>{{ $context.properties?.density || '—' }}</dd>
+            </dl>
+          } @else {
+            <dl class="land">
+              <dt>Area:</dt>
+              <dd>{{ $context.properties?.area }}</dd>
+              <dt>Density:</dt>
+              <dd>{{ $context.properties?.density }}</dd>
+              <dt>Time Zone:</dt>
+              <dd>{{ $context.properties?.timeZone }}</dd>
+              <dt>Bundesrat Votes:</dt>
+              <dd>
+                {{ $context.properties?.bundesratVotes }}
+              </dd>
+            </dl>
+          }
         </div>
       </ng-template>
-    </app-chart-popup> -->
+    </app-chart-popup>
   </app-chart>
 </div>

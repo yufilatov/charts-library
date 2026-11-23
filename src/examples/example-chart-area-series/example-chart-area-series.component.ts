@@ -20,6 +20,7 @@ import { ChartModule } from 'src/components/components.module';
         '../../styles/epl-emblems.scss',
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ExampleChartAreaSeriesComponent implements OnInit {
 

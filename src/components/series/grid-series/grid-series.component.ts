@@ -13,6 +13,7 @@ import { ChartComponent } from '../../chart/chart.component';
         ChartDisposable,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true
 })
 export class GridSeriesChartComponent implements OnChanges {
     @Input() step: { x: number, y: number } = { x: 5, y: 1 };

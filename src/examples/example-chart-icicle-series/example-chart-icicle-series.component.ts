@@ -9,6 +9,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
     templateUrl: './example-chart-icicle-series.component.html',
     styleUrls: ['./example-chart-icicle-series.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ExampleChartIcicleSeriesComponent {
     data = DATA;

@@ -1,36 +1,37 @@
 <div class="buttons checkbox-btn-group checkbox-selection-group">
-  <div
-    *ngFor="let type of types; let i = index;"
-    [ngClass]="'form-check '+'form-check-'+(i+1)">
-    <input
-      type="checkbox"
-      [checked]="i===0 ? true : false"
-      name="radio"
-      [value]="'button_'+(i+1)"
-      [id]="'button_'+(i+1)"
-      (click)="onClick(i)">
-    <label [for]="'button_'+(i+1)">{{type}}</label>
+  @for (type of types; track type; let i = $index) {
+    <div
+      [ngClass]="'form-check '+'form-check-'+(i+1)">
+      <input
+        type="checkbox"
+        [checked]="i===0 ? true : false"
+        name="radio"
+        [value]="'button_'+(i+1)"
+        [id]="'button_'+(i+1)"
+        (click)="onClick(i)">
+        <label [for]="'button_'+(i+1)">{{type}}</label>
+      </div>
+    }
   </div>
-</div>
-<div class="chart-container">
+  <div class="chart-container">
 
-  <app-chart>
-    <ng-container *ngFor="let chart of datum; let i = index;">
-      <app-chart-series
-        type="line"
-        [style]="getStyle(i)"
-        [data]="data[i]"
-        [curveType]="getCurve(i)"
-        [range]="range">
-      </app-chart-series>
-    </ng-container>
-    <app-chart-x-axis
-      [range]="range.x"
+    <app-chart>
+      @for (chart of datum; track chart; let i = $index) {
+        <app-chart-series
+          type="line"
+          [style]="getStyle(i)"
+          [data]="data[i]"
+          [curveType]="getCurve(i)"
+          [range]="range">
+        </app-chart-series>
+      }
+      <app-chart-x-axis
+        [range]="range.x"
       [ticks]="ticksX"></app-chart-x-axis>
-    <app-chart-y-axis
-      [range]="range.y"
+      <app-chart-y-axis
+        [range]="range.y"
       [ticks]="ticksY"></app-chart-y-axis>
-    <app-chart-plot [margin]="margin"></app-chart-plot>
-  </app-chart>
+      <app-chart-plot [margin]="margin"></app-chart-plot>
+    </app-chart>
 
-</div>
+  </div>

@@ -13,6 +13,7 @@ import { ChartStyleBuilder } from '../chart-style/chart-style.builder';
         ChartDisposable,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true
 })
 export class XAxisChartComponent implements OnChanges {
     @Input() range: any[];

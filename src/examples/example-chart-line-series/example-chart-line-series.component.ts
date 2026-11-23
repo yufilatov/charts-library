@@ -9,13 +9,14 @@ import { COLORS_EPL } from 'src/styles/colors';
     templateUrl: './example-chart-line-series.component.html',
     styleUrls: ['./example-chart-line-series.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ExampleChartLineSeriesComponent implements OnInit {
     COLORS = COLORS_EPL;
     DATA = DATA19;
 
-    seasons = [20, 19, 18, 17, 15, 16];
-    selectedSeason = 19;
+    seasons = [27, 26, 25, 24, 23, 20, 19, 18, 17, 15, 16];
+    selectedSeason = 27;
 
     data = [];
     range = { x: [], y: {} };

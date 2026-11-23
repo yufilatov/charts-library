@@ -47,7 +47,7 @@ export class XAxisChartService {
 
         const x = d3.axisBottom()
             .scale(scaleX)
-            .tickValues(ticks)
+            .tickValues([1,2,3])
             .tickFormat((d) => d3.format('.0f')(d));
 
         this.root
