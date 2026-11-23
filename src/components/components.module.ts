@@ -6,6 +6,7 @@ import { ChartPopupComponent } from './chart-popup/chart-popup.component';
 import { ChartPortalModule } from './chart-portal/chart-portal.module';
 import { ChartTicksComponent } from './chart-ticks/chart-ticks.component';
 import { ChartComponent } from './chart/chart.component';
+import { BreadcrumbChartComponent } from './breadcrumb/breadcrumb.component';
 import { AreaSeriesChartComponent } from './series/area-series/area-series.component';
 import { BarProgressSeriesChartComponent } from './series/bar-progress-series/bar-progress-series.component';
 import { BarSeriesChartComponent } from './series/bar-series/bar-series.component';
@@ -31,6 +32,11 @@ import { YAxisChartComponent } from './y-axis/y-axis.component';
 
 @NgModule({
     declarations: [
+        StopPropagationDirective,
+    ],
+    imports: [
+        CommonModule,
+        ChartPortalModule,
         AreaSeriesChartComponent,
         BarSeriesChartComponent,
         BarSimpleSeriesChartComponent,
@@ -52,17 +58,11 @@ import { YAxisChartComponent } from './y-axis/y-axis.component';
         WordCloudSeriesChartComponent,
         XAxisChartComponent,
         YAxisChartComponent,
-
         ChartComponent,
         ChartPlotComponent,
         ChartTicksComponent,
         ChartPopupComponent,
-        StopPropagationDirective,
-
-    ],
-    imports: [
-        CommonModule,
-        ChartPortalModule,
+        BreadcrumbChartComponent,
     ],
     exports: [
         AreaSeriesChartComponent,
@@ -91,6 +91,7 @@ import { YAxisChartComponent } from './y-axis/y-axis.component';
         ChartPlotComponent,
         ChartPopupComponent,
         ChartTicksComponent,
+        BreadcrumbChartComponent,
         StopPropagationDirective,
     ],
 })

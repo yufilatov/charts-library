@@ -14,7 +14,7 @@
         <ul>
             @for(type of types; track type) {
                 <li>
-                    <a [routerLink]="type.path" (click)="onClick($index)" [class.active]="$index === activeChart">{{ type.path }}</a>
+                    <a [routerLink]="type.path" routerLinkActive="active">{{ type.path }}</a>
                 </li>
             }
         </ul>

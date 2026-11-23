@@ -13,7 +13,7 @@ import { ChartComponent } from '../../chart/chart.component';
         ChartDisposable,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
-
+    standalone: true
 })
 export class WordCloudSeriesChartComponent implements OnChanges {
     @Input() data: any;

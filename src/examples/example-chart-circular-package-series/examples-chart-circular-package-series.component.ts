@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ChartStyle } from 'src/components/chart-style/chart-style';
 import { ChartStyleBuilder } from 'src/components/chart-style/chart-style.builder';
 import { DATA } from './data';
@@ -8,6 +8,8 @@ import { DATA } from './data';
     selector: 'app-examples-chart-circular-package',
     templateUrl: './examples-chart-circular-package-series.component.html',
     styleUrls: ['./examples-chart-circular-package-series.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class ExampleChartCircularPackageSeriesComponent {
     data = DATA;

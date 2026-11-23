@@ -1,188 +1,283 @@
 <h4>Champions League 2019/2020 Simulation</h4>
 
 <div class="pots">
-    <div *ngFor="let pot of [1, 2, 3, 4]">
-        Pot {{ pot }}
-        <ul>
-            <li *ngFor="let team of sortData(pot)">
-                {{ team.name }} ({{ team.shortCountryName }})
-            </li>
-        </ul>
+  @for (pot of [1, 2, 3, 4]; track pot) {
+    <div>
+      Pot {{ pot }}
+      <ul>
+        @for (team of sortData(pot); track team) {
+          <li>
+            {{ team.name }} ({{ team.shortCountryName }})
+          </li>
+        }
+      </ul>
     </div>
+  }
 </div>
 
 <div class="groups">
-    <div *ngFor="let group of groups; let i = index">
-        <h5>Group {{ letters[i] }}</h5>
-        <ul>
-            <li *ngFor="let team of group">
-                <div [ngClass]="getLogo(team.name)"></div>
-                {{ team.name }}
-            </li>
-        </ul>
+  @for (group of groups; track group; let i = $index) {
+    <div>
+      <h5>Group {{ letters[i] }}</h5>
+      <ul>
+        @for (team of group; track team) {
+          <li>
+            <div [ngClass]="getLogo(team.name)"></div>
+            {{ team.name }}
+          </li>
+        }
+      </ul>
     </div>
+  }
 </div>
 
 <button (click)="startDraw(1)" [disabled]="groups[0].length > 0">DRAW</button>
 <button (click)="drawFast()" [disabled]="groups[7].length === 4">SKIP</button>
-<button *ngIf=" day< 11" (click)="simulate(day)" [disabled]="groups[7].length !==4 ">
-  <ng-container *ngIf="day<7">Simulate Day {{ day }}</ng-container>
-  <ng-container *ngIf="day===7">Simulate 1/8</ng-container>
-  <ng-container *ngIf="day===8">Simulate Quarterfinals</ng-container>
-  <ng-container *ngIf="day===9">Simulate Semifinals</ng-container>
-  <ng-container *ngIf="day===10">Simulate Final</ng-container>
-</button>
+@if ( day< 11) {
+  <button (click)="simulate(day)" [disabled]="groups[7].length !==4 ">
+    @if (day<7) {
+      Simulate Day {{ day }}
+    }
+    @if (day===7) {
+      Simulate 1/8
+    }
+    @if (day===8) {
+      Simulate Quarterfinals
+    }
+    @if (day===9) {
+      Simulate Semifinals
+    }
+    @if (day===10) {
+      Simulate Final
+    }
+  </button>
+}
 
 <input type="checkbox" checked="true" (change)="checked=!checked" #input>
-<ng-container *ngIf="input.checked">HIDE</ng-container>
-<ng-container *ngIf="!input.checked">SHOW</ng-container>
+@if (input.checked) {
+  HIDE
+}
+@if (!input.checked) {
+  SHOW
+}
 RESULTS
 
-<div *ngIf="day> 1 && input.checked">
-    <div *ngFor="let match of results; let i = index">
-        <h5 *ngIf="i===0">Day 1</h5>
-        <h5 *ngIf="i===16">Day 2</h5>
-        <h5 *ngIf="i===32">Day 3</h5>
-        <h5 *ngIf="i===48">Day 4</h5>
-        <h5 *ngIf="i===64">Day 5</h5>
-        <h5 *ngIf="i===80">Day 6</h5>
-
-        <h6 *ngIf="i%16===0">Group A</h6>
-        <h6 *ngIf="i%16===2">Group B</h6>
-        <h6 *ngIf="i%16===4">Group C</h6>
-        <h6 *ngIf="i%16===6">Group D</h6>
-        <h6 *ngIf="i%16===8">Group E</h6>
-        <h6 *ngIf="i%16===10">Group F</h6>
-        <h6 *ngIf="i%16===12">Group G</h6>
-        <h6 *ngIf="i%16===14">Group H</h6>
+@if (day> 1 && input.checked) {
+  <div>
+    @for (match of results; track match; let i = $index) {
+      <div>
+        @if (i===0) {
+          <h5>Day 1</h5>
+        }
+        @if (i===16) {
+          <h5>Day 2</h5>
+        }
+        @if (i===32) {
+          <h5>Day 3</h5>
+        }
+        @if (i===48) {
+          <h5>Day 4</h5>
+        }
+        @if (i===64) {
+          <h5>Day 5</h5>
+        }
+        @if (i===80) {
+          <h5>Day 6</h5>
+        }
+        @if (i%16===0) {
+          <h6>Group A</h6>
+        }
+        @if (i%16===2) {
+          <h6>Group B</h6>
+        }
+        @if (i%16===4) {
+          <h6>Group C</h6>
+        }
+        @if (i%16===6) {
+          <h6>Group D</h6>
+        }
+        @if (i%16===8) {
+          <h6>Group E</h6>
+        }
+        @if (i%16===10) {
+          <h6>Group F</h6>
+        }
+        @if (i%16===12) {
+          <h6>Group G</h6>
+        }
+        @if (i%16===14) {
+          <h6>Group H</h6>
+        }
         <div style="display: flex; justify-items: center; padding-bottom: 5px;">
-            <div [ngClass]="getLogo(match.team1)"></div>
-            {{ match.team1 }}
-            <span class="score" [ngStyle]="match.score[0] > match.score[1] && { 'font-weight': '600' }">{{ match.score[0] }}</span> :
-            <span class="score" [ngStyle]="match.score[0] < match.score[1] && { 'font-weight': '600' }">{{ match.score[1] }}</span> {{ match.team2 }}
-            <div [ngClass]="getLogo(match.team2)" style="margin-left: 5px;"></div>
+          <div [ngClass]="getLogo(match.team1)"></div>
+          {{ match.team1 }}
+          <span class="score" [ngStyle]="match.score[0] > match.score[1] && { 'font-weight': '600' }">{{ match.score[0] }}</span> :
+          <span class="score" [ngStyle]="match.score[0] < match.score[1] && { 'font-weight': '600' }">{{ match.score[1] }}</span> {{ match.team2 }}
+          <div [ngClass]="getLogo(match.team2)" style="margin-left: 5px;"></div>
         </div>
-    </div>
-</div>
+      </div>
+    }
+  </div>
+}
 
 <div class="groups">
-    <div *ngFor="let group of groups; let i = index">
-        <h5>Group {{ letters[i] }}</h5>
-        <table>
-            <tbody>
-                <tr>
-                    <td>Team</td>
-                    <td>Points</td>
-                    <td>Goals</td>
-                </tr>
-                <tr *ngFor="let team of sort(group)">
-                    <td>{{ team.name }}</td>
-                    <td>{{ team?.points }}</td>
-                    <td>{{ (team?.goals)[0] }}:{{ (team?.goals)[1] }}</td>
-                </tr>
-            </tbody>
-        </table>
+  @for (group of groups; track group; let i = $index) {
+    <div>
+      <h5>Group {{ letters[i] }}</h5>
+      <table>
+        <tbody>
+          <tr>
+            <td>Team</td>
+            <td>Points</td>
+            <td>Goals</td>
+          </tr>
+          @for (team of sort(group); track team) {
+            <tr>
+              <td>{{ team.name }}</td>
+              <td>{{ team?.points }}</td>
+              <td>{{ (team?.goals)[0] }}:{{ (team?.goals)[1] }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
     </div>
+  }
 </div>
 
-<h4 *ngIf="day > 6">1/8 Draw</h4>
-<div *ngIf="day > 6" style="display: flex;">
+@if (day > 6) {
+  <h4>1/8 Draw</h4>
+}
+@if (day > 6) {
+  <div style="display: flex;">
     <div class="pots">
-        <div *ngFor="let pot of [1, 2]" class="column">
-            Pot {{ pot }}
-            <ul>
-                <li *ngFor="let team of sortDataPlayoff[pot - 1]">
-                    {{ team.name }} ({{ team.shortCountryName }})
-                </li>
-            </ul>
+      @for (pot of [1, 2]; track pot) {
+        <div class="column">
+          Pot {{ pot }}
+          <ul>
+            @for (team of sortDataPlayoff[pot - 1]; track team) {
+              <li>
+                {{ team.name }} ({{ team.shortCountryName }})
+              </li>
+            }
+          </ul>
         </div>
+      }
     </div>
     <div class="pots">
-        <div class="fixtures">
-            Fixtures
-            <ul>
-                <li *ngFor="let team of roundOf16Teams[0]; let i = index">
-                    {{ roundOf16Teams[1][i].name }} - {{ team.name }}
-                </li>
-            </ul>
-        </div>
+      <div class="fixtures">
+        Fixtures
+        <ul>
+          @for (team of roundOf16Teams[0]; track team; let i = $index) {
+            <li>
+              {{ roundOf16Teams[1][i].name }} - {{ team.name }}
+            </li>
+          }
+        </ul>
+      </div>
     </div>
-</div>
-<div *ngIf="day > 7" class="playoff">
+  </div>
+}
+@if (day > 7) {
+  <div class="playoff">
     <h4>1/8 Matches</h4>
     <ng-container *ngTemplateOutlet="playoff; context: { results: roundOf16, winners: roundOf8Teams }"></ng-container>
-</div>
+  </div>
+}
 
-<h4 *ngIf="day > 7">1/4 Draw</h4>
-<div *ngIf="day > 7" style="display: flex;">
+@if (day > 7) {
+  <h4>1/4 Draw</h4>
+}
+@if (day > 7) {
+  <div style="display: flex;">
     <div class="pots">
-        <div class="column">
-            Pot 1
-            <ul>
-                <li *ngFor="let team of roundOf8Teams">
-                    {{ team.name }} ({{ team.shortCountryName }})
-                </li>
-            </ul>
-        </div>
+      <div class="column">
+        Pot 1
+        <ul>
+          @for (team of roundOf8Teams; track team) {
+            <li>
+              {{ team.name }} ({{ team.shortCountryName }})
+            </li>
+          }
+        </ul>
+      </div>
     </div>
     <div class="pots">
-        <div class="fixtures">
-            Fixtures
-            <ul>
-                <li *ngFor="let match of [0, 2, 4, 6]; let i = index">
-                    {{ roundOf8Teams[match].name }} - {{ roundOf8Teams[match + 1].name }}
-                </li>
-            </ul>
-        </div>
+      <div class="fixtures">
+        Fixtures
+        <ul>
+          @for (match of [0, 2, 4, 6]; track match; let i = $index) {
+            <li>
+              {{ roundOf8Teams[match].name }} - {{ roundOf8Teams[match + 1].name }}
+            </li>
+          }
+        </ul>
+      </div>
     </div>
-</div>
-<div *ngIf="day > 8" class="playoff">
+  </div>
+}
+@if (day > 8) {
+  <div class="playoff">
     <h4>1/4 Matches</h4>
     <ng-container *ngTemplateOutlet="playoff; context: { results: roundOf8, winners: roundOf4Teams }"></ng-container>
-</div>
+  </div>
+}
 
-<h4 *ngIf="day > 8">1/2 Draw</h4>
-<div *ngIf="day > 8" style="display: flex;">
+@if (day > 8) {
+  <h4>1/2 Draw</h4>
+}
+@if (day > 8) {
+  <div style="display: flex;">
     <div class="pots">
-        <div class="column">
-            Pot 1
-            <ul>
-                <li *ngFor="let team of roundOf4Teams">
-                    {{ team.name }} ({{ team.shortCountryName }})
-                </li>
-            </ul>
-        </div>
+      <div class="column">
+        Pot 1
+        <ul>
+          @for (team of roundOf4Teams; track team) {
+            <li>
+              {{ team.name }} ({{ team.shortCountryName }})
+            </li>
+          }
+        </ul>
+      </div>
     </div>
     <div class="pots">
-        <div class="fixtures">
-            Fixtures
-            <ul>
-                <li *ngFor="let match of [0, 2]; let i = index">
-                    {{ roundOf4Teams[match].name }} - {{ roundOf4Teams[match + 1].name }}
-                </li>
-            </ul>
-        </div>
+      <div class="fixtures">
+        Fixtures
+        <ul>
+          @for (match of [0, 2]; track match; let i = $index) {
+            <li>
+              {{ roundOf4Teams[match].name }} - {{ roundOf4Teams[match + 1].name }}
+            </li>
+          }
+        </ul>
+      </div>
     </div>
-</div>
-<div *ngIf="day > 9" class="playoff">
+  </div>
+}
+@if (day > 9) {
+  <div class="playoff">
     <h4>1/2 Matches</h4>
     <ng-container *ngTemplateOutlet="playoff; context: { results: roundOf4, winners: roundOf2Teams }"></ng-container>
-</div>
+  </div>
+}
 
-<div *ngIf="day > 10" class="playoff">
+@if (day > 10) {
+  <div class="playoff">
     <h4>FINAL</h4>
     <ng-container *ngTemplateOutlet="playoff; context: { results: [roundOf2], winners: [winner] }"></ng-container>
-</div>
+  </div>
+}
 
 <ng-template #playoff let-results="results" let-winners="winners">
-    <ul>
-        <li *ngFor="let match of results; let i = index" style="display: flex; align-items: center;">
-            <div [ngClass]="getLogo(match.team1.name)"></div>
-            <span [ngStyle]="(i%2===1 || day > 10) && winners.includes(match.team1) && { 'font-weight': '600' }">{{ match.team1.name }}</span>
-            <span class="score">{{ match.score[0] }}</span> : <span class="score">{{ match.score[1] }}</span>
-            <span [ngStyle]="(i%2===1 || day > 10) && winners.includes(match.team2) && { 'font-weight': '600' }">{{ match.team2.name }}</span>
-            <div [ngClass]="getLogo(match.team2.name)" style="margin-left: 5px;"></div>
-            <span class="comment">{{ match?.comment }}</span>
-        </li>
-    </ul>
+  <ul>
+    @for (match of results; track match; let i = $index) {
+      <li style="display: flex; align-items: center;">
+        <div [ngClass]="getLogo(match.team1.name)"></div>
+        <span [ngStyle]="(i%2===1 || day > 10) && winners.includes(match.team1) && { 'font-weight': '600' }">{{ match.team1.name }}</span>
+        <span class="score">{{ match.score[0] }}</span> : <span class="score">{{ match.score[1] }}</span>
+        <span [ngStyle]="(i%2===1 || day > 10) && winners.includes(match.team2) && { 'font-weight': '600' }">{{ match.team2.name }}</span>
+        <div [ngClass]="getLogo(match.team2.name)" style="margin-left: 5px;"></div>
+        <span class="comment">{{ match?.comment }}</span>
+      </li>
+    }
+  </ul>
 </ng-template>

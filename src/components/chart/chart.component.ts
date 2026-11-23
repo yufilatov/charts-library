@@ -13,7 +13,7 @@ import { IChartSeriesState } from '../common/chart-series';
     selector: 'app-chart',
     templateUrl: './chart.component.html',
     styleUrls: ['./chart.component.scss'],
-    providers: [ ChartService ],
+    providers: [ChartService],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChartComponent implements AfterViewInit, OnChanges {
@@ -27,7 +27,7 @@ export class ChartComponent implements AfterViewInit, OnChanges {
     rect = CHART_RECT_EMPTY;
     seriesList: IChartSeriesState[] = [];
 
-    constructor(private elementRef: ElementRef) {}
+    constructor(private elementRef: ElementRef) { }
 
     ngAfterViewInit() {
         this.invalidateSize();

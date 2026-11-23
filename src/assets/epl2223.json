@@ -1,0 +1,285 @@
+{
+    "info": "English Premier League 2022/2023",
+    "data": [
+        {
+            "club": "Manchester City",
+            "twoLinesName": "Manchester City",
+            "goals": {
+                "for": {
+                    "home": 60,
+                    "away": 34
+                },
+                "against": {
+                    "home": 17,
+                    "away": 16
+                }
+            }
+        },
+        {
+            "club": "Arsenal",
+            "twoLinesName": "Arsenal",
+            "goals": {
+                "for": {
+                    "home": 53,
+                    "away": 35
+                },
+                "against": {
+                    "home": 25,
+                    "away": 18
+                }
+            }
+        },
+        {
+            "club": "Manchester United",
+            "twoLinesName": "Manchester United",
+            "goals": {
+                "for": {
+                    "home": 36,
+                    "away": 22
+                },
+                "against": {
+                    "home": 10,
+                    "away": 33
+                }
+            }
+        },
+        {
+            "club": "Newcastle United",
+            "twoLinesName": "Newcastle United",
+            "goals": {
+                "for": {
+                    "home": 36,
+                    "away": 32
+                },
+                "against": {
+                    "home": 14,
+                    "away": 19
+                }
+            }
+        },
+        {
+            "club": "Liverpool",
+            "twoLinesName": "Liverpool",
+            "goals": {
+                "for": {
+                    "home": 46,
+                    "away": 29
+                },
+                "against": {
+                    "home": 17,
+                    "away": 30
+                }
+            }
+        },
+        {
+            "club": "Brighton",
+            "twoLinesName": "Brighton",
+            "goals": {
+                "for": {
+                    "home": 37,
+                    "away": 35
+                },
+                "against": {
+                    "home": 21,
+                    "away": 32
+                }
+            }
+        },
+        {
+            "club": "Aston Villa",
+            "twoLinesName": "Aston Villa",
+            "goals": {
+                "for": {
+                    "home": 33,
+                    "away": 18
+                },
+                "against": {
+                    "home": 21,
+                    "away": 25
+                }
+            }
+        },
+        {
+            "club": "Tottenham Hotspurs",
+            "twoLinesName": "Tottenham Hotspurs",
+            "goals": {
+                "for": {
+                    "home": 37,
+                    "away": 33
+                },
+                "against": {
+                    "home": 25,
+                    "away": 38
+                }
+            }
+        },
+        {
+            "club": "Brentford",
+            "twoLinesName": "Brentford",
+            "goals": {
+                "for": {
+                    "home": 35,
+                    "away": 23
+                },
+                "against": {
+                    "home": 18,
+                    "away": 28
+                }
+            }
+        },
+        {
+            "club": "Fulham",
+            "twoLinesName": "Fulham",
+            "goals": {
+                "for": {
+                    "home": 31,
+                    "away": 24
+                },
+                "against": {
+                    "home": 29,
+                    "away": 24
+                }
+            }
+        },
+        {
+            "club": "Crystal Palace",
+            "twoLinesName": "Crystal Palace",
+            "goals": {
+                "for": {
+                    "home": 21,
+                    "away": 19
+                },
+                "against": {
+                    "home": 23,
+                    "away": 26
+                }
+            }
+        },
+        {
+            "club": "Chelsea",
+            "twoLinesName": "Chelsea",
+            "goals": {
+                "for": {
+                    "home": 20,
+                    "away": 18
+                },
+                "against": {
+                    "home": 19,
+                    "away": 28
+                }
+            }
+        },
+        {
+            "club": "Wolverhampton",
+            "twoLinesName": "Wolves",
+            "goals": {
+                "for": {
+                    "home": 19,
+                    "away": 12
+                },
+                "against": {
+                    "home": 20,
+                    "away": 38
+                }
+            }
+        },
+        {
+            "club": "West Ham United",
+            "twoLinesName": "West Ham United",
+            "goals": {
+                "for": {
+                    "home": 26,
+                    "away": 16
+                },
+                "against": {
+                    "home": 24,
+                    "away": 31
+                }
+            }
+        },
+        {
+            "club": "Bournemouth",
+            "twoLinesName": "Bourne mouth",
+            "goals": {
+                "for": {
+                    "home": 20,
+                    "away": 17
+                },
+                "against": {
+                    "home": 28,
+                    "away": 43
+                }
+            }
+        },
+        {
+            "club": "Nottingham Forest",
+            "twoLinesName": "Nottingham Forest",
+            "goals": {
+                "for": {
+                    "home": 27,
+                    "away": 11
+                },
+                "against": {
+                    "home": 24,
+                    "away": 44
+                }
+            }
+        },
+        {
+            "club": "Everton",
+            "twoLinesName": "Everton",
+            "goals": {
+                "for": {
+                    "home": 16,
+                    "away": 18
+                },
+                "against": {
+                    "home": 27,
+                    "away": 30
+                }
+            }
+        },
+        {
+            "club": "Leicester City",
+            "twoLinesName": "Leicester City",
+            "goals": {
+                "for": {
+                    "home": 23,
+                    "away": 28
+                },
+                "against": {
+                    "home": 27,
+                    "away": 41
+                }
+            }
+        },
+        {
+            "club": "Leeds United",
+            "twoLinesName": "Leeds United",
+            "goals": {
+                "for": {
+                    "home": 26,
+                    "away": 22
+                },
+                "against": {
+                    "home": 37,
+                    "away": 41
+                }
+            }
+        },
+        {
+            "club": "Southampton",
+            "twoLinesName": "Soton",
+            "goals": {
+                "for": {
+                    "home": 19,
+                    "away": 17
+                },
+                "against": {
+                    "home": 37,
+                    "away": 36
+                }
+            }
+        }
+    ]
+}

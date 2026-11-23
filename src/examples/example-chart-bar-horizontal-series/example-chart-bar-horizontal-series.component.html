@@ -3,9 +3,11 @@
         <h5>ENGLISH PREMIER LEAGUE SEASON </h5>
         <select [(ngModel)]="selectedSeason"
             (change)="onSeasonChange(); updateData(inputScored.checked, inputConceded.checked)">
-            <option *ngFor="let season of seasons;" [value]="season" [selected]="season === 19">
+            @for (season of seasons; track season) {
+            <option [value]="season" [selected]="selectedSeason">
                 {{ getSeason(season) }}
             </option>
+            }
         </select>
         <h5>GOALS STATISTICS: </h5>
     </div>
@@ -28,9 +30,9 @@
         <select #selectSortBy [(ngModel)]="selectedSortBy"
             (change)="onSortChange(); updateData(inputScored.checked, inputConceded.checked)">
             @for(sort of sorts; track sort) {
-                <option [value]="sort" [selected]="sort === 'Position'">
-                    {{ sort | uppercase }}
-                </option>
+            <option [value]="sort" [selected]="sort === 'Position'">
+                {{ sort | uppercase }}
+            </option>
             }
         </select>
     </div>
@@ -40,33 +42,16 @@
     <div class="container">
         <div class="logos">
             @for(club of clubs$ | async; track club) {
-                <div [ngClass]="getLogo(club.club)"></div>
+            <div [ngClass]="getLogo(club.club)"></div>
             }
         </div>
 
         <app-chart>
-            <app-chart-series
-                type="bar"
-                orientation="horizontal"
-                [data]="data$ | async"
-                [style]="style"
-                [range]="range"
-            ></app-chart-series>
-            <app-chart-series
-                type="grid"
-                [step]="gridStep"
-                [style]="gridStyle"
-                [range]="range"
-            ></app-chart-series>
-            <app-chart-x-axis
-                [range]="range.x"
-                [ticks]="ticksX"
-            ></app-chart-x-axis>
-            <app-chart-y-axis
-                [range]="range.y"
-                [ticks]="ticksY"
-                reverse="true"
-            ></app-chart-y-axis>
+            <app-chart-series type="bar" orientation="horizontal" [data]="data$ | async" [style]="style"
+                [range]="range"></app-chart-series>
+            <app-chart-series type="grid" [step]="gridStep" [style]="gridStyle" [range]="range"></app-chart-series>
+            <app-chart-x-axis [range]="range.x" [ticks]="ticksX"></app-chart-x-axis>
+            <app-chart-y-axis [range]="range.y" [ticks]="ticksY" reverse="true"></app-chart-y-axis>
             <app-chart-plot [margin]="margin"></app-chart-plot>
         </app-chart>
     </div>

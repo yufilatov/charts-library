@@ -1,5 +1,5 @@
 import { DATA } from './data';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ChartStyle } from 'src/components/chart-style/chart-style';
 import { ChartStyleBuilder } from 'src/components/chart-style/chart-style.builder';
 
@@ -7,6 +7,8 @@ import { ChartStyleBuilder } from 'src/components/chart-style/chart-style.builde
     selector: 'app-examples-chart-progress-bar',
     templateUrl: './examples-chart-bar-progress-series.component.html',
     styleUrls: ['./examples-chart-bar-progress-series.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class ExampleChartBarProgressSeriesComponent implements OnInit {
     clubs = this.getClubs(DATA);

@@ -9,6 +9,7 @@ import { ChartStyleBuilder } from 'src/components/chart-style/chart-style.builde
     templateUrl: './example-chart-radial-tree-series.component.html',
     styleUrls: ['./example-chart-radial-tree-series.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ExampleChartRadialTreeComponent {
     data = DATA;

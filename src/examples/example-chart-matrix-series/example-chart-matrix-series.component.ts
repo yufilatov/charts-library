@@ -8,6 +8,7 @@ import { ChartStyleBuilder } from 'src/components/chart-style/chart-style.builde
     templateUrl: './example-chart-matrix-series.component.html',
     styleUrls: ['./example-chart-matrix-series.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ExampleChartMatrixSeriesComponent {
     data = DATA_GT;

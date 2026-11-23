@@ -20,6 +20,7 @@ import { ExampleChartSunburstSeriesComponent } from 'src/examples/example-chart-
 import { ExampleChartWordCloudSeriesComponent } from 'src/examples/example-chart-word-cloud-series/examples-chart-word-cloud-series.component';
 import { ExampleChartMapSeriesComponent } from 'src/examples/example-chart-map-series/example-chart-map-series.component';
 import { ExampleLeagueSimulationComponent } from 'src/examples/example-league-simulation/example-league-simulation.component';
+import { ExampleChampionsLeague2024Component } from 'src/examples/example-champions-league-2024/example-champions-league-2024.component';
 
 export const routes: Routes = [
     // { path: '', redirectTo: 'pie', pathMatch: 'full'},
@@ -43,6 +44,7 @@ export const routes: Routes = [
     { path: 'sunburst', component: ExampleChartSunburstSeriesComponent },
     { path: 'word-cloud', component: ExampleChartWordCloudSeriesComponent },
     { path: 'league', component: ExampleLeagueSimulationComponent },
+    { path: 'league-2024', component: ExampleChampionsLeague2024Component },
 ];
 
 @NgModule({

@@ -10,6 +10,7 @@ import { ChartComponent } from '../chart/chart.component';
         ChartDisposable,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true
 })
 export class ChartTicksComponent {
     @HostBinding('class.chart-ticks') hostClass = true;

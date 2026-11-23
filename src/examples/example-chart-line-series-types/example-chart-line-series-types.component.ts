@@ -8,6 +8,7 @@ import { ChartStyleBuilder } from 'src/components/chart-style/chart-style.builde
     templateUrl: './example-chart-line-series-types.component.html',
     styleUrls: ['./example-chart-line-series-types.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ExampleChartLineSeriesTypesComponent implements OnInit {
     xs = DATA.xs;

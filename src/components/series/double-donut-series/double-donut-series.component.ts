@@ -13,6 +13,7 @@ import { DoubleDonutSeriesChartService } from './double-donut-series.service';
         ChartDisposable,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true
 })
 export class DoubleDonutSeriesChartComponent {
     @Input() data: any[];

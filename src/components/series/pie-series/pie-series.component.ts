@@ -10,6 +10,7 @@ import { PieSeriesChartService } from './pie-series.service';
     styleUrls: [],
     providers: [PieSeriesChartService, ChartDisposable],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true
 })
 export class PieSeriesChartComponent {
     @Input() data: any[];

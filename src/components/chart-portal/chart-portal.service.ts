@@ -1,4 +1,4 @@
-import { Injectable, ApplicationRef, ComponentFactoryResolver, Injector, EmbeddedViewRef, TemplateRef } from '@angular/core';
+import { Injectable, ApplicationRef, EnvironmentInjector, Injector, EmbeddedViewRef, TemplateRef, createComponent } from '@angular/core';
 import { ChartPortalPositionStrategy } from './chart-portal-position.strategy';
 import { ChartPortalComponent } from './chart-portal.component';
 
@@ -7,7 +7,6 @@ export class ChartPortalService {
     constructor(
         private appRef: ApplicationRef,
         private injector: Injector,
-        private componentFactoryResolver: ComponentFactoryResolver,
     ) {
     }
 
@@ -15,9 +14,10 @@ export class ChartPortalService {
         link: { templateRef: TemplateRef<any>, context: any },
         positionStrategy: ChartPortalPositionStrategy,
     ) {
-        const componentRef = this.componentFactoryResolver
-            .resolveComponentFactory(ChartPortalComponent)
-            .create(this.injector);
+        const componentRef = createComponent(ChartPortalComponent, {
+            environmentInjector: this.appRef.injector as EnvironmentInjector,
+            elementInjector: this.injector,
+        });
 
         componentRef.instance.link = link;
 

@@ -15,6 +15,7 @@ import { ChartComponent } from '../../chart/chart.component';
     changeDetection: ChangeDetectionStrategy.OnPush,
     // tslint:disable-next-line:use-view-encapsulation
     encapsulation: ViewEncapsulation.None,
+    standalone: true
 })
 export class RadialTreeSeriesChartComponent implements OnChanges {
     @Input() data: any[];

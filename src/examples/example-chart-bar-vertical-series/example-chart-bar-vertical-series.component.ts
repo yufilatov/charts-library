@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy } from '@angular/core';
 import { ChartStyleBuilder } from 'src/components/chart-style/chart-style.builder';
 import { ChartStyle } from 'src/components/chart-style/chart-style';
 import { Observable, empty } from 'rxjs';
@@ -13,6 +13,8 @@ import { getSumFromObjectValues } from 'src/components/kit';
         './example-chart-bar-vertical-series.component.scss',
         '../../styles/epl-emblems.scss',
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 
 export class ExampleChartBarVerticalSeriesComponent implements OnInit {
@@ -29,7 +31,7 @@ export class ExampleChartBarVerticalSeriesComponent implements OnInit {
     ticksX = [];
     ticksY = [];
 
-    seasons = [20, 19, 18, 17, 16, 15];
+    seasons = [27, 26, 25, 24, 23, 20, 19, 18, 17, 16, 15];
     sorts = ['Position', 'Name', 'Goals Ascending', 'Goals Descending'];
 
     colors = ['#709a28', '#87ba30', '#c23612', '#e0471f'];
@@ -82,7 +84,7 @@ export class ExampleChartBarVerticalSeriesComponent implements OnInit {
                 break;
             }
             case 'Position': {
-                this.sortBy = (a, b) => a.position - b.position;
+                this.sortBy = (a, b) => a.points != null && b.points != null ? b.points - a.points : a.position - b.position;
                 break;
             }
             case 'Goals Descending': {

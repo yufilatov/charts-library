@@ -18,6 +18,7 @@ import { ChartPortalPositionStrategy } from '../chart-portal/chart-portal-positi
     changeDetection: ChangeDetectionStrategy.OnPush,
     // tslint:disable-next-line:use-view-encapsulation
     encapsulation: ViewEncapsulation.None,
+    standalone: true
 })
 export class ChartPopupComponent implements AfterContentInit {
     @ContentChild(TemplateRef, { static: false }) templateRef: TemplateRef<any>;

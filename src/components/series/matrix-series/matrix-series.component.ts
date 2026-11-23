@@ -1,4 +1,4 @@
-import { Component, OnChanges, Input, Output, SimpleChanges } from '@angular/core';
+import { Component, OnChanges, Input, Output, SimpleChanges, ChangeDetectionStrategy } from '@angular/core';
 import { ChartDisposable } from '../../common/chart-disposable';
 import { ChartComponent } from '../../chart/chart.component';
 import { ChartStyleBuilder } from '../../chart-style/chart-style.builder';
@@ -12,6 +12,8 @@ import { IChartMatrixOrderType, MatrixSeriesChartService } from './matrix-series
         MatrixSeriesChartService,
         ChartDisposable,
     ],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: true
 })
 export class MatrixSeriesChartComponent implements OnChanges {
     @Input() data: { nodes: any[], links: any[] };

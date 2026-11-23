@@ -1,17 +1,19 @@
-import { Component, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input, SimpleChanges, OnChanges, ChangeDetectionStrategy } from '@angular/core';
 import { ChartStyleBuilder } from '../../chart-style/chart-style.builder';
 import { ChartComponent } from '../../chart/chart.component';
 import { BarSimpleSeriesChartService } from './bar-simple-series.service';
 import { ChartDisposable } from '../../common/chart-disposable';
 
 @Component({
-  selector: 'app-chart-series[type="bar-simple"]',
-  templateUrl: './bar-simple-series.component.html',
-  styleUrls: ['./bar-simple-series.component.scss'],
-  providers: [
-    ChartDisposable,
-    BarSimpleSeriesChartService,
-  ],
+    selector: 'app-chart-series[type="bar-simple"]',
+    templateUrl: './bar-simple-series.component.html',
+    styleUrls: ['./bar-simple-series.component.scss'],
+    providers: [
+        ChartDisposable,
+        BarSimpleSeriesChartService,
+    ],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: true
 })
 export class BarSimpleSeriesChartComponent implements OnChanges {
   @Input() data: any[];

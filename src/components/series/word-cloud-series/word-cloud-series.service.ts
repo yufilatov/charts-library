@@ -6,7 +6,7 @@ import { IChartPieSeriesState } from '../line-series/line-series.service';
 import { IChartSeriesState, CHART_DEFAULT_SERIES_STATE } from '../../common/chart-series';
 import { ChartStyle } from '../../chart-style/chart-style';
 import { ChartDrawFactory } from '../../common/chart-draw.factory';
-import * as cloud from 'd3.layout.cloud';
+import cloud from 'd3.layout.cloud';
 import * as d3 from 'd3';
 
 const DEFAULT_STATE: IChartSeriesState = {

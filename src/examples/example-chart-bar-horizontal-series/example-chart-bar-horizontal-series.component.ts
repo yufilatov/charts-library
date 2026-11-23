@@ -16,6 +16,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms'
         '../../styles/epl-emblems.scss',
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class ExampleChartBarHorizontalSeriesComponent implements OnInit {
     @ViewChild('inputScored', { static: true }) inputScored: ElementRef;
@@ -31,13 +32,13 @@ export class ExampleChartBarHorizontalSeriesComponent implements OnInit {
     ticksX = [];
     ticksY = [];
 
-    seasons = [20, 19, 18, 17, 16, 15];
+    seasons = [27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15];
     sorts = ['Position', 'Name', 'Goals Ascending', 'Goals Descending'];
 
     colors = ['#709a28', '#87ba30', '#c23612', '#e0471f'];
 
     sortBy;
-    selectedSeason = 19;
+    selectedSeason = 27;
     selectedSortBy = 'Position';
 
     constructor(private dataService: ExampleDataService) { }
@@ -77,7 +78,7 @@ export class ExampleChartBarHorizontalSeriesComponent implements OnInit {
                 break;
             }
             case 'Position': {
-                this.sortBy = (a, b) => a.position - b.position;
+                this.sortBy = (a, b) => a.points != null && b.points != null ? b.points - a.points : a.position - b.position;
                 break;
             }
             case 'Goals Descending': {

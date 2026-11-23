@@ -9,6 +9,7 @@ import { ChordSeriesChartService } from './chord-series.service';
     template: '',
     providers: [ChordSeriesChartService, ChartDisposable],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true
 })
 export class ChordSeriesChartComponent implements OnChanges {
     @Input() data: any[];

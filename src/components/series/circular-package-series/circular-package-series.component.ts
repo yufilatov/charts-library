@@ -9,7 +9,7 @@ import { ChartComponent } from '../../chart/chart.component';
     template: '',
     providers: [CircularPackageSeriesService, ChartDisposable],
     changeDetection: ChangeDetectionStrategy.OnPush,
-
+    standalone: true
 })
 export class CircularPackageSeriesChartComponent implements OnChanges {
     @Input() data: any;

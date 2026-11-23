@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ChartStyle } from 'src/components/chart-style/chart-style';
 import { DATA } from 'src/examples/example-chart-chord-series/data';
 import { ChartStyleBuilder } from 'src/components/chart-style/chart-style.builder';
@@ -8,6 +8,8 @@ import { ChartStyleBuilder } from 'src/components/chart-style/chart-style.builde
     selector: 'app-examples-chart-chord',
     templateUrl: './examples-chart-chord-series.component.html',
     styleUrls: ['./examples-chart-chord-series.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class ExampleChartChordSeriesComponent {
     data = DATA;

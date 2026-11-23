@@ -13,6 +13,7 @@ import { ChartDisposable } from '../../../components/common/chart-disposable';
         DonutSeriesChartService,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true
 })
 export class DonutSeriesChartComponent {
     @Input() data: any[];

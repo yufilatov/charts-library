@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { ChartStyle } from 'src/components/chart-style/chart-style';
 import { ChartStyleBuilder } from 'src/components/chart-style/chart-style.builder';
 import { Observable, Subscription } from 'rxjs';
@@ -11,6 +11,8 @@ import { ChartDisposable } from 'src/components/common/chart-disposable';
     templateUrl: './examples-chart-bar-simple-series.component.html',
     styleUrls: ['./examples-chart-bar-simple-series.component.scss'],
     providers: [ChartDisposable],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class ExampleChartBarSimpleSeriesComponent implements OnInit {
     prevDuration = 0;
