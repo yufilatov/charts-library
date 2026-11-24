@@ -1,4 +1,4 @@
-import { Component, Input, SimpleChanges, OnChanges, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, effect, inject } from '@angular/core';
 import { ChartStyleBuilder } from '../../chart-style/chart-style.builder';
 import { ChartComponent } from '../../chart/chart.component';
 import { BarSimpleSeriesChartService } from './bar-simple-series.service';
@@ -15,38 +15,30 @@ import { ChartDisposable } from '../../common/chart-disposable';
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: true
 })
-export class BarSimpleSeriesChartComponent implements OnChanges {
-  @Input() data: any[];
-  @Input() style = new ChartStyleBuilder();
-  @Input() total = 100;
-  @Input() animation = false;
+export class BarSimpleSeriesChartComponent {
+  data = input<any[]>();
+  style = input(new ChartStyleBuilder());
+  total = input(100);
+  animation = input(false);
 
-  constructor(
-    private chart: ChartComponent,
-    private seriesService: BarSimpleSeriesChartService,
-    private disposable: ChartDisposable,
-  ) {
-    const rectChange = chart.rectChange.subscribe(() => this.invalidate());
+  private readonly chart = inject(ChartComponent);
+  private readonly seriesService = inject(BarSimpleSeriesChartService);
+  private readonly disposable = inject(ChartDisposable);
+
+  constructor() {
+    const rectChange = this.chart.rectChange.subscribe(() => this.invalidate());
     this.disposable.add(() => rectChange.unsubscribe());
-  }
-
-  ngOnChanges(changes: SimpleChanges) {
-    const marginChange = changes.margin;
-    const dataChange = changes.data;
-
-    if (marginChange || dataChange) {
-      this.invalidate();
-    }
+    effect(() => this.invalidate());
   }
 
   private invalidate() {
     const state = this.seriesService.setState({
-      data: this.data || [],
-      style: this.style,
+      data: this.data() || [],
+      style: this.style(),
       rect: this.chart.rect,
-      margin: this.chart.margin,
-      total: this.total,
-      animation: this.animation,
+      margin: this.chart.margin(),
+      total: this.total(),
+      animation: this.animation(),
     });
 
     this.chart.addSeries(state);

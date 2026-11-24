@@ -4,15 +4,16 @@ import { ChartPortalService } from './chart-portal.service';
 import { ChartPortalComponent } from './chart-portal.component';
 
 @NgModule({
-    declarations: [
-        ChartPortalComponent,
-    ],
     providers: [
         ChartPortalService,
     ],
     imports: [
         CommonModule,
-    ]
+        ChartPortalComponent,
+    ],
+    exports: [
+        ChartPortalComponent,
+    ],
 })
 export class ChartPortalModule {
 }

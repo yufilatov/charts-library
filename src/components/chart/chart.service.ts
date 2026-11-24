@@ -1,4 +1,4 @@
-import { Injectable, ElementRef, Renderer2 } from '@angular/core';
+import { Injectable, ElementRef, Renderer2, inject } from '@angular/core';
 import * as d3 from 'd3';
 import * as _ from 'lodash';
 import { elementsFromPoint } from '../kit';
@@ -13,12 +13,15 @@ export class ChartService {
     private defs: d3.Selection<SVGElement, undefined, SVGElement, undefined> = null;
     private maxLevel = 0;
 
-    constructor(private elementRef: ElementRef, renderer: Renderer2) {
-        const svg = renderer.createElement('svg', 'svg') as SVGElement;
-        const defs = renderer.createElement('defs', 'svg') as SVGElement;
+    private readonly elementRef = inject(ElementRef);
+    private readonly renderer = inject(Renderer2);
 
-        renderer.appendChild(svg, defs);
-        renderer.appendChild(elementRef.nativeElement, svg);
+    constructor() {
+        const svg = this.renderer.createElement('svg', 'svg') as SVGElement;
+        const defs = this.renderer.createElement('defs', 'svg') as SVGElement;
+
+        this.renderer.appendChild(svg, defs);
+        this.renderer.appendChild(this.elementRef.nativeElement, svg);
 
         this.svg = d3.select<SVGElement, undefined>(svg);
         this.defs = d3.select<SVGElement, undefined>(defs);

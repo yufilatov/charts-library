@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, inject } from '@angular/core';
 import { IChartSeriesState, CHART_DEFAULT_SERIES_STATE, createScaleX, createScaleY } from '../../common/chart-series';
 import { ChartDisposable } from '../../common/chart-disposable';
 import { ChartService } from '../../chart/chart.service';
@@ -30,12 +30,12 @@ export class BarVerticalSeriesChartService {
     selectionChange = new EventEmitter<any>();
 
 
-    constructor(
-        private chartService: ChartService,
-        private disposable: ChartDisposable,
-    ) {
+    private readonly chartService = inject(ChartService);
+    private readonly disposable = inject(ChartDisposable);
+
+    constructor() {
         const selector = { id: this.state.id, level: 0 };
-        this.root = chartService.select(selector);
+        this.root = this.chartService.select(selector);
         this.root.classed('chart-series-bar', true);
 
         this.disposable.add(() => this.chartService.remove(selector));

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { IChartSeriesState, CHART_DEFAULT_SERIES_STATE } from '../../../components/common/chart-series';
 import { ChartDisposable } from '../../../components/common/chart-disposable';
 import { ChartService } from '../../chart/chart.service';
@@ -19,12 +19,12 @@ export class ChordSeriesChartService {
         id: `chart-series-chord-${nextId()}`,
     };
 
-    constructor(
-        private chartService: ChartService,
-        private disposable: ChartDisposable,
-    ) {
+    private readonly chartService = inject(ChartService);
+    private readonly disposable = inject(ChartDisposable);
+
+    constructor() {
         const selector = { id: this.state.id, level: 0 };
-        this.root = chartService.select(selector);
+        this.root = this.chartService.select(selector);
 
         this.disposable.add(() => this.chartService.remove(selector));
     }

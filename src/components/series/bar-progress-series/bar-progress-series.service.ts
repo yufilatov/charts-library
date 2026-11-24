@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import { nextId } from '../../kit';
 import { ChartService } from '../../chart/chart.service';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ChartStyle } from '../../chart-style/chart-style';
 import { ChartDisposable } from '../../common/chart-disposable';
 import { ChartDrawFactory } from '../../common/chart-draw.factory';
@@ -28,12 +28,12 @@ export class BarProgressSeriesChartService {
         id: `chart-series-bar-${nextId()}`,
     };
 
-    constructor(
-        private chartService: ChartService,
-        private disposable: ChartDisposable,
-    ) {
+    private readonly chartService = inject(ChartService);
+    private readonly disposable = inject(ChartDisposable);
+
+    constructor() {
         const selector = { id: this.state.id, level: 0 };
-        this.root = chartService.select(selector);
+        this.root = this.chartService.select(selector);
         this.root.classed('chart-series-bar', true);
 
         this.disposable.add(() => this.chartService.remove(selector));

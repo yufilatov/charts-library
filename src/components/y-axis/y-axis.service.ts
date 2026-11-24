@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import * as d3 from 'd3';
 import { nextId } from '../kit';
 import { IChartSeriesState, CHART_DEFAULT_SERIES_STATE, createScaleY } from '../common/chart-series';
@@ -22,13 +22,13 @@ export class YAxisChartService {
         id: `chart-y-axis-${nextId()}`,
     };
 
-    constructor(
-        private chartService: ChartService,
-        private disposable: ChartDisposable,
-    ) {
+    private readonly chartService = inject(ChartService);
+    private readonly disposable = inject(ChartDisposable);
+
+    constructor() {
         const selector = { id: this.state.id, level: 0 };
 
-        this.root = chartService.select(selector);
+        this.root = this.chartService.select(selector);
         this.disposable.add(() => this.chartService.remove(selector));
     }
 
@@ -45,10 +45,12 @@ export class YAxisChartService {
 
         this.root.selectAll('.axis').remove();
 
-        const scaleY = createScaleY('linear', {
-            ...state,
-            data: reverse ? [d3.min(range), d3.max(range)] : [d3.max(range), d3.min(range)],
-        });
+        const scaleY = d3
+            .scaleLinear()
+            .domain([range[0], range[1]])
+            .range(reverse
+                ? [margin.top, rect.height + margin.top]
+                : [rect.height + margin.top, margin.top]);
 
         const y = d3.axisLeft()
             .scale(scaleY)

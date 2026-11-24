@@ -1,5 +1,5 @@
 import { IChartLabelStyle, ChartStyle, IChartMatrixStyle } from '../../chart-style/chart-style';
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, inject } from '@angular/core';
 import { ChartStyleBuilder } from '../../chart-style/chart-style.builder';
 import { ChartDisposable } from '../../common/chart-disposable';
 import { ChartDrawFactory } from '../../common/chart-draw.factory';
@@ -9,7 +9,7 @@ import { IChartRect } from '../../common/chart-rect';
 import { nextId } from '../../kit';
 import * as d3 from 'd3';
 
-export interface IChartMatrixSeriesState {
+export interface ChartMatrixSeriesState {
     id?: string;
     type?: string;
     data?: { nodes: any[], links: any[], count?: any[] };
@@ -21,17 +21,17 @@ export interface IChartMatrixSeriesState {
     labelOffset?: number;
 }
 
-export type IChartMatrixOrderType = 'name' | 'group' | 'count';
+export type ChartMatrixOrderType = 'name' | 'group' | 'count';
 
 @Injectable()
 export class MatrixSeriesChartService {
     private root: d3.Selection<SVGElement, string, SVGElement, number>;
-    private state: IChartMatrixSeriesState;
+    private state: ChartMatrixSeriesState;
     // tslint:disable-next-line:variable-name
-    private _order: IChartMatrixOrderType;
+    private _order: ChartMatrixOrderType;
     onOrderChange = new EventEmitter<string>();
 
-    set order(order: IChartMatrixOrderType) {
+    set order(order: ChartMatrixOrderType) {
         this._order = order;
         this.onOrderChange.emit(order);
         if (this.state) {
@@ -43,17 +43,17 @@ export class MatrixSeriesChartService {
         return this._order;
     }
 
-    constructor(
-        private chartService: ChartService,
-        private disposable: ChartDisposable,
-    ) {
+    private readonly chartService = inject(ChartService);
+    private readonly disposable = inject(ChartDisposable);
+
+    constructor() {
         const selector = { id: `chart-series-matrix-${nextId()}`, level: 0 };
-        this.root = chartService.select(selector);
+        this.root = this.chartService.select(selector);
 
         this.disposable.add(() => this.chartService.remove(selector));
     }
 
-    setState(state: IChartMatrixSeriesState) {
+    setState(state: ChartMatrixSeriesState) {
         const { rect, data, style, labelOffset } = state;
 
         this.state = state;
@@ -257,7 +257,7 @@ export class MatrixSeriesChartService {
 
     }
 
-    invalidateOrder(order: IChartMatrixOrderType) {
+    invalidateOrder(order: ChartMatrixOrderType) {
         this.move(order);
     }
 
@@ -308,7 +308,7 @@ export class MatrixSeriesChartService {
         return { matrix, nodes, length };
     }
 
-    private move(order: IChartMatrixOrderType) {
+    private move(order: ChartMatrixOrderType) {
         const { rect, data, labelOffset } = this.state;
 
         const chartSideLength = Math.min(rect.width, rect.height);

@@ -3,7 +3,7 @@ import { ChartService } from '../../chart/chart.service';
 import { nextId, ChartMath, hasParent } from '../../kit';
 import { ChartDisposable } from '../../common/chart-disposable';
 import { ChartDrawFactory } from '../../common/chart-draw.factory';
-import { Injectable, EventEmitter, Renderer2 } from '@angular/core';
+import { Injectable, EventEmitter, Renderer2, inject } from '@angular/core';
 import { IChartSeriesState, CHART_DEFAULT_SERIES_STATE } from '../../common/chart-series';
 import { IChartArcStyle, IChartLabelStyle, ChartStyle, IChartZoomStyle } from '../../chart-style/chart-style';
 
@@ -46,19 +46,19 @@ export class SunburstSeriesChartService {
         return this.localSelection;
     }
 
-    constructor(
-        private chartService: ChartService,
-        private disposable: ChartDisposable,
-        renderer: Renderer2,
-    ) {
-        const svg = chartService.selectRoot().node() as SVGElement;
+    private readonly chartService = inject(ChartService);
+    private readonly disposable = inject(ChartDisposable);
+    private readonly renderer = inject(Renderer2);
 
-        this.root = chartService.select(this.selector);
+    constructor() {
+        const svg = this.chartService.selectRoot().node() as SVGElement;
+
+        this.root = this.chartService.select(this.selector);
         this.root.classed('chart-series-sunburst', true);
 
         this.disposable.add(() => this.chartService.remove(this.selector));
         this.disposable.add(
-            renderer.listen(svg, 'click', () => {
+            this.renderer.listen(svg, 'click', () => {
                 this.selection = [];
             }),
         );

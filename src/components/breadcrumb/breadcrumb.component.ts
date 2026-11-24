@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, Output, EventEmitter, HostBinding } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Output, EventEmitter, HostBinding, input, effect } from '@angular/core';
 import { ChartStyleBuilder } from '../chart-style/chart-style.builder';
 import { IChartLabelStyle, ChartStyle } from '../chart-style/chart-style';
 import { NgClass } from '@angular/common';
@@ -15,25 +15,33 @@ export class BreadcrumbChartComponent {
 
     @Output() selectionChange = new EventEmitter<any>();
 
-    @Input() path: any[] = [];
-    @Input() style = new ChartStyleBuilder();
-    @Input() icon: 'sunburst' | 'bubble' = 'sunburst';
-    @Input() format = (x: any) => '' + x;
-    @Input() set selection(value: any) {
+    path = input<any[]>([]);
+    style = input(new ChartStyleBuilder());
+    icon = input<'sunburst' | 'bubble'>('sunburst');
+    format = (x: any) => '' + x;
+    selection = input<any>();
+
+    #selection: any;
+
+    constructor() {
+        effect(() => {
+            const value = this.selection();
+            if (value !== this.#selection) {
+                this.#selection = value;
+                this.selectionChange.emit(value);
+            }
+        });
+    }
+
+    select(value: any) {
         if (value !== this.#selection) {
             this.#selection = value;
             this.selectionChange.emit(value);
         }
     }
 
-    #selection: any;
-
-    get selection() {
-        return this.#selection;
-    }
-
     getColor(index: number): string {
-        const labelStyle = this.style.compile<IChartLabelStyle>(ChartStyle.label);
+        const labelStyle = this.style().compile<IChartLabelStyle>(ChartStyle.label);
         const color = labelStyle(null, index).color;
 
         return color;

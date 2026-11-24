@@ -1,4 +1,4 @@
-import { Component, Input, HostBinding, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, HostBinding, ChangeDetectionStrategy, ChangeDetectorRef, input, effect, inject } from '@angular/core';
 import { ChartDisposable } from '../common/chart-disposable';
 import { ChartComponent } from '../chart/chart.component';
 
@@ -14,18 +14,19 @@ import { ChartComponent } from '../chart/chart.component';
 })
 export class ChartTicksComponent {
     @HostBinding('class.chart-ticks') hostClass = true;
-    @Input() data: any[];
-    @Input() for = 'bar';
+    data = input<any[]>();
+    for = input('bar');
 
     scale: (d: number) => number = () => 0;
 
-    constructor(
-        private chart: ChartComponent,
-        private cd: ChangeDetectorRef,
-        private disposable: ChartDisposable,
-    ) {
-        const rectChange = chart.rectChange.subscribe(() => this.invalidate());
-        const seriesListChange = chart.seriesListChange.subscribe(() => this.invalidate());
+    private readonly chart = inject(ChartComponent);
+    private readonly cd = inject(ChangeDetectorRef);
+    private readonly disposable = inject(ChartDisposable);
+
+    constructor() {
+        effect(() => this.invalidate());
+        const rectChange = this.chart.rectChange.subscribe(() => this.invalidate());
+        const seriesListChange = this.chart.seriesListChange.subscribe(() => this.invalidate());
 
         this.disposable.add(() => rectChange.unsubscribe());
         this.disposable.add(() => seriesListChange.unsubscribe());
@@ -33,7 +34,7 @@ export class ChartTicksComponent {
 
     invalidate() {
         const { seriesList } = this.chart;
-        const series = seriesList.find(x => x.type === this.for);
+        const series = seriesList.find(x => x.type === this.for());
         if (series) {
             this.scale = series.scaleY;
             this.cd.markForCheck();

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ViewEncapsulation, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, effect, inject } from '@angular/core';
 import { ChartDisposable } from '../common/chart-disposable';
 import { ChartComponent } from '../chart/chart.component';
 import { CHART_MARGIN_EMPTY, IChartMargin } from '../common/chart-margin';
@@ -11,23 +11,20 @@ import { CHART_MARGIN_EMPTY, IChartMargin } from '../common/chart-margin';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true
 })
-export class ChartPlotComponent implements OnChanges {
-    @Input() margin: IChartMargin = CHART_MARGIN_EMPTY;
+export class ChartPlotComponent {
+    margin = input<IChartMargin>(CHART_MARGIN_EMPTY);
 
-    constructor(
-        private chart: ChartComponent,
-        private disposable: ChartDisposable,
-    ) {
-        const rectChange = chart.rectChange.subscribe(() => this.invalidate());
+    private readonly chart = inject(ChartComponent);
+    private readonly disposable = inject(ChartDisposable);
+
+    constructor() {
+        const rectChange = this.chart.rectChange.subscribe(() => this.invalidate());
 
         this.disposable.add(() => rectChange.unsubscribe());
-    }
-
-    ngOnChanges() {
-        this.invalidate();
+        effect(() => this.invalidate());
     }
 
     private invalidate() {
-        this.chart.margin = { ...CHART_MARGIN_EMPTY, ...this.margin };
+        this.chart.setMargin({ ...CHART_MARGIN_EMPTY, ...this.margin() });
     }
 }

@@ -1,4 +1,4 @@
-import { Directive, ElementRef, OnInit, Input } from '@angular/core';
+import { Directive, ElementRef, OnInit, input, inject } from '@angular/core';
 import * as _ from 'lodash';
 
 @Directive({
@@ -6,12 +6,12 @@ import * as _ from 'lodash';
     standalone: false
 })
 export class StopPropagationDirective implements OnInit {
-    @Input() events: string | string[];
+    events = input<string | string[]>();
 
-    constructor(private elementRef: ElementRef) { }
+    private readonly elementRef = inject(ElementRef);
 
     ngOnInit() {
-        let events = [this.events];
+        let events = [this.events()];
 
         if (!_.isArray(events)) {
             events = events;

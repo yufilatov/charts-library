@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, Output, SimpleChanges, ViewEncapsulation, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Output, ViewEncapsulation, ChangeDetectionStrategy, input, effect, inject } from '@angular/core';
 import { ChartDisposable } from '../../common/chart-disposable';
 import { ChartStyleBuilder } from '../../chart-style/chart-style.builder';
 import { ChartComponent } from '../../chart/chart.component';
@@ -16,45 +16,40 @@ import { SunburstSeriesChartService } from './sunburst-series.service';
     encapsulation: ViewEncapsulation.None,
     standalone: true
 })
-export class SunburstSeriesChartComponent implements OnChanges {
-    @Input() data: any[];
-    @Input() style = new ChartStyleBuilder();
-    @Input() rings = 2;
+export class SunburstSeriesChartComponent {
+    data = input<any[]>();
+    style = input(new ChartStyleBuilder());
+    rings = input(2);
+    selection = input<any[]>();
 
     @Output() get selectionChange() {
         return this.seriesService.selectionChange;
     }
 
-    @Input() set selection(value: any[]) {
-        this.seriesService.selection = value;
-    }
+    private readonly chart = inject(ChartComponent);
+    private readonly seriesService = inject(SunburstSeriesChartService);
+    private readonly disposable = inject(ChartDisposable);
 
-    get selection() {
-        return this.seriesService.selection;
-    }
-
-    constructor(
-        private chart: ChartComponent,
-        private seriesService: SunburstSeriesChartService,
-        private disposable: ChartDisposable,
-    ) {
-        const rectChange = chart.rectChange.subscribe(() => this.invalidate());
+    constructor() {
+        const rectChange = this.chart.rectChange.subscribe(() => this.invalidate());
         this.disposable.add(() => rectChange.unsubscribe());
-    }
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes.data) {
-            this.invalidate();
-        }
+        effect(() => {
+            const value = this.selection();
+            if (value !== undefined) {
+                this.seriesService.selection = value;
+            }
+        });
+        effect(() => this.invalidate());
     }
 
     private invalidate() {
         this.seriesService.setState({
-            data: this.data,
-            style: this.style,
-            rings: this.rings,
+            data: this.data(),
+            style: this.style(),
+            rings: this.rings(),
             rect: this.chart.rect,
-            margin: this.chart.margin,
+            margin: this.chart.margin(),
         });
     }
 }

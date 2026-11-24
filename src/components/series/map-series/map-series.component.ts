@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ViewEncapsulation, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation, Output, input, effect, inject } from '@angular/core';
 import { ChartDisposable } from '../../common/chart-disposable';
 import { ChartComponent } from '../../chart/chart.component';
 import { ChartStyleBuilder } from '../../chart-style/chart-style.builder';
@@ -13,12 +13,10 @@ import { MapSeriesChartService } from './map-series.service';
         ChartDisposable,
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    encapsulation: ViewEncapsulation.None,
-    standalone: true
 })
-export class MapSeriesChartComponent implements OnChanges {
-    @Input() data: any;
-    @Input() style = new ChartStyleBuilder();
+export class MapSeriesChartComponent {
+    data = input<any>();
+    style = input(new ChartStyleBuilder());
 
     @Output() get onHover() {
         return this.seriesService.mouseover;
@@ -28,28 +26,24 @@ export class MapSeriesChartComponent implements OnChanges {
         return this.seriesService.mouseleave;
     }
 
-    constructor(
-        private chart: ChartComponent,
-        private seriesService: MapSeriesChartService,
-        private disposable: ChartDisposable,
-    ) {
-        const rectChange = chart.rectChange.subscribe(() => this.invalidate());
+    private readonly chart = inject(ChartComponent);
+    private readonly seriesService = inject(MapSeriesChartService);
+    private readonly disposable = inject(ChartDisposable);
+
+    constructor() {
+        effect(() => this.invalidate());
+        const rectChange = this.chart.rectChange.subscribe(() => this.invalidate());
 
         this.disposable.add(() => rectChange.unsubscribe());
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes.data || changes.style) {
-            this.invalidate();
-        }
-    }
 
     private invalidate() {
         this.seriesService.setState({
-            data: this.data,
-            style: this.style,
+            data: this.data(),
+            style: this.style(),
             rect: this.chart.rect,
-            margin: this.chart.margin,
+            margin: this.chart.margin(),
         });
     }
 }

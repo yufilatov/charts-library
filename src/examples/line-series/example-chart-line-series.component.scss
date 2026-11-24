@@ -1,0 +1,209 @@
+:host {
+    font-size: 20px;
+    font-family: "Proxima Nova Regular";
+    letter-spacing: 1px;
+}
+
+.chart {
+    &-container {
+        max-width: 1400px;
+        height: 750px;
+    }
+}
+
+.toolbar {
+    display: flex;
+    align-items: flex-end;
+    gap: 22px;
+    margin-bottom: 16px;
+    letter-spacing: normal;
+}
+
+.field-label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #5c7362;
+}
+
+.select {
+    position: relative;
+    min-width: 168px;
+
+    &.open {
+        z-index: 30;
+    }
+}
+
+.select-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 10px 14px;
+    border: 1px solid #d5e4cc;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #ffffff 0%, #f3f8ee 100%);
+    color: #1c2b22;
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(70, 110, 50, 0.12), inset 0 1px 0 #fff;
+
+    &:hover,
+    .open & {
+        border-color: #87ba30;
+    }
+}
+
+.chevron {
+    width: 0;
+    height: 0;
+    flex: 0 0 auto;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #709a28;
+    transition: transform 0.16s ease;
+}
+
+.select.open .chevron {
+    transform: rotate(180deg);
+}
+
+.select-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 1;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    max-height: 280px;
+    overflow: auto;
+    border: 1px solid #d5e4cc;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 16px 36px rgba(70, 110, 50, 0.16);
+
+    button {
+        width: 100%;
+        padding: 8px 10px;
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+        color: #1c2b22;
+        font: inherit;
+        font-size: 14px;
+        text-align: left;
+        cursor: pointer;
+
+        &:hover {
+            background: #eef6e4;
+        }
+
+        &.active {
+            background: linear-gradient(90deg, #87ba30, #709a28);
+            color: #111;
+            font-weight: 700;
+        }
+    }
+}
+
+.select-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: default;
+}
+
+.buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    max-width: 1400px;
+    margin-bottom: 16px;
+    letter-spacing: normal;
+}
+
+.toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid #d5e4cc;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #ffffff 0%, #f3f8ee 100%);
+    color: #1c2b22;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(70, 110, 50, 0.12), inset 0 1px 0 #fff;
+
+    &:hover,
+    &:has(input:checked) {
+        border-color: var(--club, #87ba30);
+    }
+
+    input {
+        appearance: none;
+        width: 16px;
+        height: 16px;
+        margin: 0;
+        border: 1px solid #c5d6bc;
+        border-radius: 4px;
+        background: #fff;
+        display: grid;
+        place-content: center;
+        cursor: pointer;
+
+        &::after {
+            content: '';
+            width: 8px;
+            height: 4px;
+            border-left: 2px solid transparent;
+            border-bottom: 2px solid transparent;
+            transform: rotate(-45deg) translateY(-1px);
+        }
+
+        &:checked {
+            border-color: var(--club, #87ba30);
+            background: var(--club, #87ba30);
+        }
+
+        &:checked::after {
+            border-color: var(--mark, #fff);
+        }
+    }
+}
+
+.form-check {
+    &-arsenal { --club: #dd0000; }
+    &-bournemouth { --club: #ed1c24; }
+    &-brightonhovealbion { --club: #005daa; }
+    &-burnley { --club: #80bfff; --mark: #111; }
+    &-cardiffcity { --club: #0000ff; }
+    &-chelsea { --club: #034694; }
+    &-crystalpalace { --club: #bbbdbf; --mark: #111; }
+    &-everton { --club: #274488; }
+    &-fulham { --club: #000000; }
+    &-huddersfieldtown { --club: #192552; }
+    &-leicestercity { --club: #0053a0; }
+    &-liverpool { --club: #dc3912; }
+    &-manchestercity { --club: #6caddf; --mark: #111; }
+    &-manchesterunited { --club: #e80909; }
+    &-newcastleunited { --club: #a8996e; --mark: #111; }
+    &-southampton { --club: #ed1a3b; }
+    &-tottenhamhotspur { --club: #182433; }
+    &-watford { --club: #fbee23; --mark: #111; }
+    &-westhamunited { --club: #7f0000; }
+    &-wolverhamptonwanderers { --club: #fdb913; --mark: #111; }
+    &-astonvilla { --club: #670e36; }
+    &-norwichcity { --club: #00a650; }
+    &-sheffieldunited { --club: #ee2737; }
+}

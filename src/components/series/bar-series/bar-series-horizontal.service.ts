@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, inject } from '@angular/core';
 import { IChartSeriesState, CHART_DEFAULT_SERIES_STATE, createScaleX, createScaleY } from '../../common/chart-series';
 import { ChartDisposable } from '../../common/chart-disposable';
 import { ChartService } from '../../chart/chart.service';
@@ -29,12 +29,12 @@ export class BarHorizontalSeriesChartService {
 
     selectionChange = new EventEmitter<any>();
 
-    constructor(
-        private chartService: ChartService,
-        private disposable: ChartDisposable,
-    ) {
+    private readonly chartService = inject(ChartService);
+    private readonly disposable = inject(ChartDisposable);
+
+    constructor() {
         const selector = { id: this.state.id, level: 0 };
-        this.root = chartService.select(selector);
+        this.root = this.chartService.select(selector);
         this.root.classed('chart-series-bar', true);
 
         this.disposable.add(() => this.chartService.remove(selector));
@@ -46,7 +46,11 @@ export class BarHorizontalSeriesChartService {
             ...state,
         };
 
-        const { data, style, animation, total, range } = this.state;
+        const { data, style, animation, range, rect } = this.state;
+
+        if (!rect.width || !rect.height) {
+            return this.state;
+        }
 
         const datum = data.map((x, i) => i);
         datum.push(data.length);
@@ -77,20 +81,6 @@ export class BarHorizontalSeriesChartService {
         let draw;
         const format = d3.format(animationStyle(null, 0).format);
 
-        // draw('.chart-bar-vertical', {
-        //   create: selection =>
-        //     selection
-        //       .append('rect'),
-        //   update: selection =>
-        //     selection
-        //       .attr('width', scaleX(total) - scaleX(0))
-        //       .attr('height', (d, i) => barStyle(d, i).height)
-        //       .attr('vertical-align', 'middle')
-        //       .attr('x', scaleX(0))
-        //       .attr('y', (d, i) => scaleY(i))
-        //       .attr('fill', (d, i) => barStyle(d, i).background),
-        // });
-
         for (let i = 0; i < data.length; i++) {
             draw = ChartDrawFactory(this.root, data[i]);
 
@@ -104,13 +94,13 @@ export class BarHorizontalSeriesChartService {
                         .attr('width', d => animation ? 0 : scaleX(d) - scaleX(0))
                         .attr('height', (d, c) => barStyle(d, c).size)
                         .attr('x', scaleX(0))
-                        .attr('y', (d, c) => scaleY(i))
+                        .attr('y', () => scaleY(i))
                         .attr('transform', (d, c) => {
                             let previous = 0;
                             for (let j = 0; j < c; j++) {
                                 previous = previous + data[i][j];
                             }
-                            return `translate(${c > 0 ? scaleX(previous) - scaleX(0) : 0} , ${scaleX(data.length) / data.length + barStyle(d, i).size / 2})`;
+                            return `translate(${c > 0 ? scaleX(previous) - scaleX(0) : 0}, ${scaleY(data.length) / data.length - barStyle(d, i).size / 2})`;
                         })
                         .attr('fill', (d, c) => barStyle(d, c).fill)
                         .on('mouseover', (d, c) => {

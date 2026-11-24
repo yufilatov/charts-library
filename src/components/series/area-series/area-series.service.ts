@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { ChartStyle } from 'src/components/chart-style/chart-style';
 import { ChartService } from 'src/components/chart/chart.service';
 import { ChartDisposable } from 'src/components/common/chart-disposable';
@@ -30,13 +30,13 @@ export class AreaSeriesChartService {
         id: `chart-series-area-${nextId()}`,
     };
 
-    constructor(
-        private chartService: ChartService,
-        private disposable: ChartDisposable,
-    ) {
+    private readonly chartService = inject(ChartService);
+    private readonly disposable = inject(ChartDisposable);
+
+    constructor() {
         const selector = { id: this.state.id, level: 0 };
 
-        this.root = chartService.select(selector);
+        this.root = this.chartService.select(selector);
         this.disposable.add(() => this.chartService.remove(selector));
     }
 

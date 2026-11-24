@@ -1,14 +1,11 @@
-import { Injectable, ApplicationRef, EnvironmentInjector, Injector, EmbeddedViewRef, TemplateRef, createComponent } from '@angular/core';
+import { Injectable, ApplicationRef, EnvironmentInjector, Injector, EmbeddedViewRef, TemplateRef, createComponent, inject } from '@angular/core';
 import { ChartPortalPositionStrategy } from './chart-portal-position.strategy';
 import { ChartPortalComponent } from './chart-portal.component';
 
 @Injectable()
 export class ChartPortalService {
-    constructor(
-        private appRef: ApplicationRef,
-        private injector: Injector,
-    ) {
-    }
+    private readonly appRef = inject(ApplicationRef);
+    private readonly injector = inject(Injector);
 
     enter(
         link: { templateRef: TemplateRef<any>, context: any },

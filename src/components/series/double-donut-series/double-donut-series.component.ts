@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ViewEncapsulation, Input } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input, effect, inject } from '@angular/core';
 import { ChartDisposable } from '../../../components/common/chart-disposable';
 import { ChartComponent } from '../../chart/chart.component';
 import { ChartStyleBuilder } from '../../chart-style/chart-style.builder';
@@ -16,27 +16,28 @@ import { DoubleDonutSeriesChartService } from './double-donut-series.service';
     standalone: true
 })
 export class DoubleDonutSeriesChartComponent {
-    @Input() data: any[];
-    @Input() style = new ChartStyleBuilder();
-    @Input() total: number;
+    data = input<any[]>();
+    style = input(new ChartStyleBuilder());
+    total = input<number>();
 
-    constructor(
-        private chart: ChartComponent,
-        private seriesService: DoubleDonutSeriesChartService,
-        private disposable: ChartDisposable,
-    ) {
-        const rectChange = chart.rectChange.subscribe(() => this.invalidate());
+    private readonly chart = inject(ChartComponent);
+    private readonly seriesService = inject(DoubleDonutSeriesChartService);
+    private readonly disposable = inject(ChartDisposable);
+
+    constructor() {
+        effect(() => this.invalidate());
+        const rectChange = this.chart.rectChange.subscribe(() => this.invalidate());
 
         this.disposable.add(() => rectChange.unsubscribe());
     }
 
     private invalidate() {
         this.seriesService.setState({
-            data: this.data,
-            style: this.style,
-            total: this.total,
+            data: this.data(),
+            style: this.style(),
+            total: this.total(),
             rect: this.chart.rect,
-            margin: this.chart.margin,
+            margin: this.chart.margin(),
         });
     }
 }

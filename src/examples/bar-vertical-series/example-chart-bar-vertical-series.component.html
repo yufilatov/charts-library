@@ -1,0 +1,76 @@
+<div class="dropdowns">
+    <div style="display: flex;align-items: center;">
+        <h5>ENGLISH PREMIER LEAGUE SEASON </h5>
+        <select [(ngModel)]="selectedSeason"
+            (change)="onSeasonChange(); updateData(inputScored.checked, inputConceded.checked)">
+            @for (season of seasons; track season) {
+                <option [ngValue]="season">
+                    {{ getSeason(season) }}
+                </option>
+            }
+        </select>
+        <h5>GOALS STATISTICS: </h5>
+    </div>
+    <div class="radio-buttons">
+        <div>
+            <input #inputScored type="checkbox" checked
+                (change)="updateData(inputScored.checked, inputConceded.checked)">
+            Scored
+        </div>
+        <div>
+            <input #inputConceded type="checkbox"
+                (change)="updateData(inputScored.checked, inputConceded.checked)">
+            Conceded
+        </div>
+    </div>
+</div>
+
+<div class="dropdowns">
+    <div style="display: flex;align-items: center;">
+        <h5>SORT BY </h5>
+        <select [(ngModel)]="selectedSortBy"
+            (change)="onSortChange(); updateData(inputScored.checked, inputConceded.checked)">
+            @for (sort of sorts; track sort) {
+                <option [ngValue]="sort">
+                    {{ sort | uppercase }}
+                </option>
+            }
+        </select>
+    </div>
+</div>
+
+<div>
+    <app-chart>
+        <app-chart-series
+            type="bar"
+            orientation="vertical"
+            [data]="data$ | async"
+            [range]="range"
+            [style]="style">
+        </app-chart-series>
+        <!-- <app-chart-series
+            type="grid"
+            [step]="gridStep"
+            [style]="gridStyle"
+            [range]="range">
+        </app-chart-series> -->
+        <app-chart-x-axis
+            [range]="range.x"
+            [ticks]="ticksX">
+        </app-chart-x-axis>
+        <app-chart-y-axis
+            [range]="range.y"
+            [ticks]="ticksY">
+        </app-chart-y-axis>
+        <app-chart-plot [margin]="margin"></app-chart-plot>
+    </app-chart>
+
+    <div style="padding-left: 58.5px;width: 1200px;display: inline-flex;">
+        @for (club of clubs$ | async; track club.club) {
+            <div style="display:flex; flex-direction: column;font-size: 9px;text-align: center;">
+                <div [ngClass]="getLogo(club.club)"></div>
+                <div style="width: 53.8px">{{ club.twoLinesName }}</div>
+            </div>
+        }
+    </div>
+</div>

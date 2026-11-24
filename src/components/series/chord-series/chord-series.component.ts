@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, effect, inject } from '@angular/core';
 import { ChartDisposable } from '../../../components/common/chart-disposable';
 import { ChartStyleBuilder } from '../../chart-style/chart-style.builder';
 import { ChartComponent } from '../../chart/chart.component';
@@ -11,32 +11,28 @@ import { ChordSeriesChartService } from './chord-series.service';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true
 })
-export class ChordSeriesChartComponent implements OnChanges {
-    @Input() data: any[];
-    @Input() style = new ChartStyleBuilder();
+export class ChordSeriesChartComponent {
+    data = input<any[]>();
+    style = input(new ChartStyleBuilder());
 
-    constructor(
-        private chart: ChartComponent,
-        private seriesService: ChordSeriesChartService,
-        private disposable: ChartDisposable,
-    ) {
-        const rectChange = chart.rectChange.subscribe(() => this.invalidate());
+    private readonly chart = inject(ChartComponent);
+    private readonly seriesService = inject(ChordSeriesChartService);
+    private readonly disposable = inject(ChartDisposable);
+
+    constructor() {
+        effect(() => this.invalidate());
+        const rectChange = this.chart.rectChange.subscribe(() => this.invalidate());
 
         this.disposable.add(() => rectChange.unsubscribe());
     }
 
-    ngOnChanges(changes: SimpleChanges) {
-        if (changes.data) {
-            this.invalidate();
-        }
-    }
 
     private invalidate() {
         this.seriesService.setState({
-            data: this.data,
-            style: this.style,
+            data: this.data(),
+            style: this.style(),
             rect: this.chart.rect,
-            margin: this.chart.margin,
+            margin: this.chart.margin(),
         });
     }
 }

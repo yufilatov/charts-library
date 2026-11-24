@@ -1,8 +1,4 @@
-import {
-    Component,
-    HostBinding, ChangeDetectionStrategy, HostListener, Output, EventEmitter, AfterViewInit,
-    ViewEncapsulation, Input, OnChanges, SimpleChanges, ElementRef
-} from '@angular/core';
+import { Component, HostBinding, ChangeDetectionStrategy, HostListener, Output, EventEmitter, AfterViewInit, ElementRef, input, signal, effect, untracked, inject } from '@angular/core';
 
 import { ChartService } from './chart.service';
 import { IChartMargin, CHART_MARGIN_EMPTY } from '../common/chart-margin';
@@ -16,10 +12,13 @@ import { IChartSeriesState } from '../common/chart-series';
     providers: [ChartService],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChartComponent implements AfterViewInit, OnChanges {
+export class ChartComponent implements AfterViewInit {
     @HostBinding('class.app-chart') hostClass = true;
 
-    @Input() margin: IChartMargin = CHART_MARGIN_EMPTY;
+    readonly marginInput = input(CHART_MARGIN_EMPTY, { alias: 'margin' });
+    readonly margin = signal<IChartMargin>(CHART_MARGIN_EMPTY, {
+        equal: (a, b) => a.top === b.top && a.right === b.right && a.bottom === b.bottom && a.left === b.left,
+    });
 
     @Output() rectChange = new EventEmitter<IChartRect>();
     @Output() seriesListChange = new EventEmitter<IChartSeriesState[]>();
@@ -27,7 +26,21 @@ export class ChartComponent implements AfterViewInit, OnChanges {
     rect = CHART_RECT_EMPTY;
     seriesList: IChartSeriesState[] = [];
 
-    constructor(private elementRef: ElementRef) { }
+    private readonly elementRef = inject(ElementRef);
+
+    constructor() {
+        effect(() => {
+            const next = this.marginInput();
+            untracked(() => {
+                this.margin.set(next);
+                this.invalidateSize();
+            });
+        });
+    }
+
+    setMargin(margin: IChartMargin) {
+        this.margin.set(margin);
+    }
 
     ngAfterViewInit() {
         this.invalidateSize();
@@ -36,7 +49,7 @@ export class ChartComponent implements AfterViewInit, OnChanges {
     invalidateSize() {
         const { nativeElement } = this.elementRef;
         const rect = nativeElement.getBoundingClientRect();
-        const margin = this.margin;
+        const margin = this.margin();
 
         this.rect = {
             top: rect.top + margin.top,
@@ -48,16 +61,6 @@ export class ChartComponent implements AfterViewInit, OnChanges {
         };
 
         this.rectChange.emit(this.rect);
-    }
-
-    ngOnChanges(changes: SimpleChanges) {
-        // tslint:disable-next-line:no-string-literal
-        const marginChange = changes['margin'];
-        if (marginChange) {
-            this.margin = marginChange.currentValue;
-            this.invalidateSize();
-        }
-        this.invalidateSize();
     }
 
     @HostListener('window:resize')

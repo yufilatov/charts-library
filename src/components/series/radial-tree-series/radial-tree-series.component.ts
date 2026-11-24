@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ViewEncapsulation, OnChanges, Input, Output } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ViewEncapsulation, Output, input, effect, inject } from '@angular/core';
 import { RadialTreeSeriesChartService } from './radial-tree-series.service';
 import { ChartDisposable } from '../../common/chart-disposable';
 import { ChartStyleBuilder } from '../../chart-style/chart-style.builder';
@@ -17,50 +17,47 @@ import { ChartComponent } from '../../chart/chart.component';
     encapsulation: ViewEncapsulation.None,
     standalone: true
 })
-export class RadialTreeSeriesChartComponent implements OnChanges {
-    @Input() data: any[];
-    @Input() style = new ChartStyleBuilder();
-    @Input() layout: 'tidy';
-    @Input() links: 'straight';
-    @Input() levels = 0;
-    @Input() offset = 100;
+export class RadialTreeSeriesChartComponent {
+    data = input<any[]>();
+    style = input(new ChartStyleBuilder());
+    layout = input<'tidy'>();
+    links = input<'straight'>();
+    levels = input(0);
+    offset = input(100);
+    selection = input<any[]>();
 
     @Output() get selectionChange(): any {
         return this.seriesService.selectionChange;
     }
 
-    @Input() set selection(value: any[]) {
-        this.seriesService.selection = value;
-    }
+    private readonly chart = inject(ChartComponent);
+    private readonly seriesService = inject(RadialTreeSeriesChartService);
+    private readonly disposable = inject(ChartDisposable);
 
-    get selection() {
-        return this.seriesService.selection;
-    }
-
-    constructor(
-        private chart: ChartComponent,
-        private seriesService: RadialTreeSeriesChartService,
-        private disposable: ChartDisposable,
-    ) {
-        const rectChange = chart.rectChange.subscribe(() => this.invalidate());
+    constructor() {
+        const rectChange = this.chart.rectChange.subscribe(() => this.invalidate());
 
         this.disposable.add(() => rectChange.unsubscribe());
-    }
 
-    ngOnChanges() {
-        this.invalidate();
+        effect(() => {
+            const value = this.selection();
+            if (value !== undefined) {
+                this.seriesService.selection = value;
+            }
+        });
+        effect(() => this.invalidate());
     }
 
     private invalidate() {
         this.seriesService.setState({
-            data: this.data,
-            style: this.style,
-            layout: this.layout,
-            levels: this.levels,
-            links: this.links,
-            offset: this.offset,
+            data: this.data(),
+            style: this.style(),
+            layout: this.layout(),
+            levels: this.levels(),
+            links: this.links(),
+            offset: this.offset(),
             rect: this.chart.rect,
-            margin: this.chart.margin,
+            margin: this.chart.margin(),
         });
     }
 }

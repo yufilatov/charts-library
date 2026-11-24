@@ -1,4 +1,5 @@
-import { Component, ChangeDetectorRef, ChangeDetectionStrategy, ElementRef, Renderer2, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { Component, ChangeDetectorRef, ChangeDetectionStrategy, ElementRef, Renderer2, TemplateRef, inject } from '@angular/core';
 import { ChartPortalPositionStrategy } from './chart-portal-position.strategy';
 
 @Component({
@@ -6,17 +7,17 @@ import { ChartPortalPositionStrategy } from './chart-portal-position.strategy';
     templateUrl: './chart-portal.component.html',
     styleUrls: ['./chart-portal.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    imports: [NgTemplateOutlet],
 })
 export class ChartPortalComponent {
     link: { templateRef: TemplateRef<any>, context: any };
 
-    constructor(
-        private cd: ChangeDetectorRef,
-        private elementRef: ElementRef,
-        private renderer: Renderer2,
-    ) {
-        renderer.addClass(elementRef.nativeElement, 'chart-portal');
+    private readonly cd = inject(ChangeDetectorRef);
+    private readonly elementRef = inject(ElementRef);
+    private readonly renderer = inject(Renderer2);
+
+    constructor() {
+        this.renderer.addClass(this.elementRef.nativeElement, 'chart-portal');
     }
 
     attach(positionStrategy: ChartPortalPositionStrategy) {

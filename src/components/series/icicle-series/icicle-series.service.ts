@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import * as d3 from 'd3';
 import { nextId } from '../../kit';
 import { IChartSeriesState, CHART_DEFAULT_SERIES_STATE } from '../../common/chart-series';
@@ -19,12 +19,12 @@ const DEFAULT_STATE: IChartIcicleSeriesState = {
 export class IcicleSeriesChartService {
     private root: d3.Selection<SVGElement, string, SVGElement, number>;
 
-    constructor(
-        private chartService: ChartService,
-        private disposable: ChartDisposable,
-    ) {
+    private readonly chartService = inject(ChartService);
+    private readonly disposable = inject(ChartDisposable);
+
+    constructor() {
         const selector = { id: `chart-series-pie-${nextId()}`, level: 0 };
-        this.root = chartService.select(selector);
+        this.root = this.chartService.select(selector);
 
         this.disposable.add(() => this.chartService.remove(selector));
     }

@@ -1,4 +1,4 @@
-import { Component, Input, TemplateRef, NgZone, ContentChild, AfterContentInit, ChangeDetectionStrategy, ViewEncapsulation, Renderer2, HostBinding } from '@angular/core';
+import { Component, TemplateRef, NgZone, ContentChild, AfterContentInit, ChangeDetectionStrategy, ViewEncapsulation, Renderer2, input, inject } from '@angular/core';
 import * as d3 from 'd3';
 import * as _ from 'lodash';
 import { ChartPortalService } from '../chart-portal/chart-portal.service';
@@ -22,18 +22,16 @@ import { ChartPortalPositionStrategy } from '../chart-portal/chart-portal-positi
 })
 export class ChartPopupComponent implements AfterContentInit {
     @ContentChild(TemplateRef, { static: false }) templateRef: TemplateRef<any>;
-    @Input() for: string;
-    @Input() openDelay = 1000;
-    @Input() panelClass = 'chart-popup';
+    for = input<string>();
+    openDelay = input(1000);
+    panelClass = input('chart-popup');
 
-    constructor(
-        private chartService: ChartService,
-        private zone: NgZone,
-        private portalService: ChartPortalService,
-        private renderer: Renderer2,
-        private chart: ChartComponent,
-        private disposable: ChartDisposable,
-    ) { }
+    private readonly chartService = inject(ChartService);
+    private readonly zone = inject(NgZone);
+    private readonly portalService = inject(ChartPortalService);
+    private readonly renderer = inject(Renderer2);
+    private readonly chart = inject(ChartComponent);
+    private readonly disposable = inject(ChartDisposable);
 
     ngAfterContentInit() {
         let attachment = null;
@@ -42,10 +40,10 @@ export class ChartPopupComponent implements AfterContentInit {
         const show = () => {
             if (position) {
                 const path = this.chartService.hitTest(position);
-                const target = path.filter(x => x.hasAttribute(`chart-${this.for}-selector-hover`));
+                const target = path.filter(x => x.hasAttribute(`chart-${this.for()}-selector-hover`));
                 if (target.length) {
                     const datum = d3.select(target[0]).datum();
-                    const classList = ['chart-popup', this.panelClass];
+                    const classList = ['chart-popup', this.panelClass()];
                     const strategy = new ChartPortalPositionStrategy(classList, document, position);
                     const link = {
                         templateRef: this.templateRef,
@@ -70,7 +68,7 @@ export class ChartPopupComponent implements AfterContentInit {
         };
 
         this.zone.runOutsideAngular(() => {
-            const showWithDelay = _.debounce(show, this.openDelay);
+            const showWithDelay = _.debounce(show, this.openDelay());
 
             this.chartService
                 .selectRoot()

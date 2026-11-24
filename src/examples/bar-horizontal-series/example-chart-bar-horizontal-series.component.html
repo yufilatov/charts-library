@@ -1,0 +1,101 @@
+@if (openMenu) {
+    <button type="button" class="select-backdrop" aria-label="Close menu" (click)="openMenu = null"></button>
+}
+
+<div class="toolbar">
+    <div class="field">
+        <span class="field-label">Premier League season</span>
+        <div class="select" [class.open]="openMenu === 'season'">
+            <button type="button" class="select-trigger" aria-haspopup="listbox"
+                [attr.aria-expanded]="openMenu === 'season'" (click)="toggleMenu('season')">
+                <span>{{ getSeason(selectedSeason) }}</span>
+                <span class="chevron" aria-hidden="true"></span>
+            </button>
+            @if (openMenu === 'season') {
+                <ul class="select-menu" role="listbox">
+                    @for (season of seasons; track season) {
+                        <li>
+                            <button type="button" role="option" [class.active]="season === selectedSeason"
+                                [attr.aria-selected]="season === selectedSeason" (click)="chooseSeason(season)">
+                                {{ getSeason(season) }}
+                            </button>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+
+    <div class="field">
+        <span class="field-label">Sort by</span>
+        <div class="select sort" [class.open]="openMenu === 'sort'">
+            <button type="button" class="select-trigger" aria-haspopup="listbox"
+                [attr.aria-expanded]="openMenu === 'sort'" (click)="toggleMenu('sort')">
+                <span>{{ selectedSortBy }}</span>
+                <span class="chevron" aria-hidden="true"></span>
+            </button>
+            @if (openMenu === 'sort') {
+                <ul class="select-menu" role="listbox">
+                    @for (sort of sorts; track sort) {
+                        <li>
+                            <button type="button" role="option" [class.active]="sort === selectedSortBy"
+                                [attr.aria-selected]="sort === selectedSortBy" (click)="chooseSort(sort)">
+                                {{ sort }}
+                            </button>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+
+    <div class="field">
+        <span class="field-label">Goals</span>
+        <div class="toggles">
+            <label class="toggle">
+                <input #inputScored type="checkbox" checked
+                    (change)="updateData(inputScored.checked, inputConceded.checked)">
+                <span>Scored</span>
+            </label>
+            <label class="toggle">
+                <input #inputConceded type="checkbox"
+                    (change)="updateData(inputScored.checked, inputConceded.checked)">
+                <span>Conceded</span>
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="logos">
+        @for (club of clubs$ | async; track club.club) {
+            <div [ngClass]="getLogo(club.club)"></div>
+        }
+    </div>
+
+    <app-chart>
+        <app-chart-series
+            type="bar"
+            orientation="horizontal"
+            [data]="data$ | async"
+            [style]="style"
+            [range]="range"
+        ></app-chart-series>
+        <app-chart-series
+            type="grid"
+            [step]="gridStep"
+            [style]="gridStyle"
+            [range]="range"
+        ></app-chart-series>
+        <app-chart-x-axis
+            [range]="range.x"
+            [ticks]="ticksX"
+        ></app-chart-x-axis>
+        <app-chart-y-axis
+            [range]="range.y"
+            [ticks]="ticksY"
+            [reverse]="true"
+        ></app-chart-y-axis>
+        <app-chart-plot [margin]="margin"></app-chart-plot>
+    </app-chart>
+</div>

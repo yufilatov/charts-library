@@ -1,4 +1,4 @@
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, inject } from '@angular/core';
 import { nextId } from '../../kit';
 import { IChartSeriesState, CHART_DEFAULT_SERIES_STATE } from '../../common/chart-series';
 import { ChartDisposable } from '../../common/chart-disposable';
@@ -23,12 +23,12 @@ export class MapSeriesChartService {
     mouseover = new EventEmitter<any>();
     mouseleave = new EventEmitter<any>();
 
-    constructor(
-        private chartService: ChartService,
-        private disposable: ChartDisposable,
-    ) {
+    private readonly chartService = inject(ChartService);
+    private readonly disposable = inject(ChartDisposable);
+
+    constructor() {
         const selector = { id: this.state.id, level: 0 };
-        this.root = chartService.select(selector);
+        this.root = this.chartService.select(selector);
 
         this.disposable.add(() => this.chartService.remove(selector));
     }

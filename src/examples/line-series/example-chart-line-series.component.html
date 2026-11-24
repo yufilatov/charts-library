@@ -1,0 +1,91 @@
+@if (openMenu) {
+    <button type="button" class="select-backdrop" aria-label="Close menu" (click)="openMenu = null"></button>
+}
+
+<div class="toolbar">
+    <div class="field">
+        <span class="field-label">Premier League season</span>
+        <div class="select" [class.open]="openMenu === 'season'">
+            <button type="button" class="select-trigger" aria-haspopup="listbox"
+                [attr.aria-expanded]="openMenu === 'season'" (click)="toggleMenu('season')">
+                <span>{{ getSeason(selectedSeason) }}</span>
+                <span class="chevron" aria-hidden="true"></span>
+            </button>
+            @if (openMenu === 'season') {
+                <ul class="select-menu" role="listbox">
+                    @for (season of seasons; track season) {
+                        <li>
+                            <button type="button" role="option" [class.active]="season === selectedSeason"
+                                [attr.aria-selected]="season === selectedSeason" (click)="chooseSeason(season)">
+                                {{ getSeason(season) }}
+                            </button>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+
+    <div class="field">
+        <span class="field-label">Progress day by day</span>
+        <div class="select" [class.open]="openMenu === 'chart'">
+            <button type="button" class="select-trigger" aria-haspopup="listbox"
+                [attr.aria-expanded]="openMenu === 'chart'" (click)="toggleMenu('chart')">
+                <span>{{ chartLabel }}</span>
+                <span class="chevron" aria-hidden="true"></span>
+            </button>
+            @if (openMenu === 'chart') {
+                <ul class="select-menu" role="listbox">
+                    @for (chart of charts; track chart.value) {
+                        <li>
+                            <button type="button" role="option" [class.active]="chart.value === selectedChart"
+                                [attr.aria-selected]="chart.value === selectedChart" (click)="chooseChart(chart.value)">
+                                {{ chart.label }}
+                            </button>
+                        </li>
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="buttons">
+    @for (team of DATA; track team; let i = $index) {
+        <label class="toggle" [ngClass]="format(team.club)">
+            <input type="checkbox" [checked]="i === 0" [id]="'button_' + (i + 1)" (click)="onClick(i)">
+            <span>{{ team.club }}</span>
+        </label>
+    }
+</div>
+
+  <div class="chart-container">
+    <app-chart>
+      @for (zone of zones; track zone; let i = $index) {
+        <app-chart-series
+          type="rect"
+          [range]="range"
+          [data]="[[0,39], zones[i]]"
+          [style]="rectStyle(i)">
+        </app-chart-series>
+      }
+      @for (team of DATA; track team; let i = $index) {
+        <app-chart-series
+          type="line"
+          [style]="getStyle(i)"
+          [data]="data[i]"
+          [range]="range">
+        </app-chart-series>
+      }
+      <!-- <app-chart-x-axis
+        [range]="$safeNavigationMigration(range?.x)"
+        [ticks]="ticksX">
+      </app-chart-x-axis>
+      <app-chart-y-axis
+        [range]="$safeNavigationMigration(range?.y)"
+        [ticks]="ticksY"
+        [reverse]="reverse">
+      </app-chart-y-axis> -->
+      <app-chart-plot [margin]="margin"></app-chart-plot>
+    </app-chart>
+  </div>
