@@ -7,13 +7,14 @@
     top: 0;
     pointer-events: none;
     display: block;
-    border-bottom: 5px solid white;
-    background-color: white;
+    border-radius: 16px;
+    background-color: #fffdf8;
     font-size: 12px;
     text-align: left;
     min-width: 250px;
     min-height: 40px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    padding: 12px 14px 10px;
+    box-shadow: 0 18px 44px rgba(20, 32, 24, 0.2);
     transform: translate(-50%, -105%); // IE
     // transform: translate(-50%, calc(-100% - 5px)); // Chrome
 
@@ -30,7 +31,7 @@
         bottom: 0;
         border: 10px solid transparent;
         border-bottom: 0;
-        border-top: 15px solid white;
+        border-top: 12px solid #fffdf8;
         transform: translate(-50%, 100%);
     }
 

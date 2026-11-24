@@ -25,13 +25,13 @@ export class ExampleChartMapSeriesComponent implements OnInit {
     level: 'state' | 'district' = 'state';
     districts: any[] = null;
 
-    stateColor = d3.scaleLinear()
-        .domain([700000, 18100000])
-        .range(['#c1a166', '#4c3100']);
+    stateColor = d3.scaleLinear<string>()
+        .domain([700000, 6000000, 18100000])
+        .range(['#f3ead7', '#c4a15a', '#1d3b2f']);
 
-    districtColor = d3.scaleSqrt()
-        .domain([40000, 1000000])
-        .range(['#c1a166', '#4c3100'])
+    districtColor = d3.scaleSqrt<string>()
+        .domain([40000, 200000, 1000000])
+        .range(['#f3ead7', '#c4a15a', '#1d3b2f'])
         .clamp(true);
 
     color = this.stateColor;
@@ -43,9 +43,9 @@ export class ExampleChartMapSeriesComponent implements OnInit {
 
             return {
                 fill: this.color(population == null ? this.color.domain()[0] : population),
-                strokeWidth: district ? 0.5 : 1,
-                stroke: district ? '#5c4314' : '#000000',
-                fillHover: '#006666',
+                strokeWidth: district ? 0.45 : 1.25,
+                stroke: '#fbf8f2',
+                fillHover: '#f4d27a',
             };
         });
 
@@ -75,6 +75,26 @@ export class ExampleChartMapSeriesComponent implements OnInit {
                 { label: '16M', color: this.stateColor(16000000) },
                 { label: '20M', color: this.stateColor(18000000) },
             ];
+    }
+
+    get panelTitle() {
+        if (!this.show) {
+            return 'Germany';
+        }
+
+        return this.turbo?.properties?.name || 'Germany';
+    }
+
+    get panelSubtitle() {
+        if (!this.show) {
+            return 'Federal parliamentary republic';
+        }
+
+        if (this.level === 'district') {
+            return this.turbo?.properties?.state || 'District';
+        }
+
+        return this.turbo?.properties?.capital ? `Capital · ${this.turbo.properties.capital}` : 'Federal state';
     }
 
     get mapData() {
@@ -111,5 +131,15 @@ export class ExampleChartMapSeriesComponent implements OnInit {
 
     getLogoBig(name) {
         return name ? `logo-big logo-${convertUmlauts(name.toLowerCase().replace(/\s+/g, '-'))}` : '';
+    }
+
+    formatPopulation(value: unknown) {
+        if (value == null || value === '') {
+            return '—';
+        }
+
+        const number = typeof value === 'number' ? value : Number(String(value).replace(/[^\d.]/g, ''));
+
+        return Number.isFinite(number) ? new Intl.NumberFormat('en-US').format(number) : String(value);
     }
 }
