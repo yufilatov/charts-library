@@ -8,14 +8,12 @@ import { ChartDrawFactory } from '../../common/chart-draw.factory';
 import { IChartSeriesState, CHART_DEFAULT_SERIES_STATE, createScaleX } from '../../common/chart-series';
 
 export interface IChartBarSeriesState extends IChartSeriesState {
-    total?: number;
     animation?: boolean;
 }
 
 const DEFAULT_STATE: IChartBarSeriesState = {
     ...CHART_DEFAULT_SERIES_STATE,
     type: 'bar',
-    total: 100,
 };
 
 @Injectable()

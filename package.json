@@ -18,12 +18,17 @@
     "@angular/platform-browser": "^22.3.0",
     "@angular/platform-browser-dynamic": "^22.3.0",
     "@angular/router": "^22.3.0",
+    "@fontsource-variable/source-sans-3": "^5.3.1",
+    "@ngrx/effects": "^22.0.1",
+    "@ngrx/signals": "^22.0.1",
+    "@ngrx/store": "^22.0.1",
+    "@ngrx/store-devtools": "^22.0.1",
     "d3": "^6.3.0",
     "d3-cloud": "^1.2.5",
     "d3.layout.cloud": "^1.2.0",
-    "rxjs": "^6.6.3",
+    "rxjs": "~7.8.0",
     "tslib": "^2.0.3",
-    "zone.js": "~0.15.1"
+    "zone.js": "~0.16.3"
   },
   "devDependencies": {
     "@angular/build": "^22.3.0",
@@ -31,20 +36,16 @@
     "@angular/compiler-cli": "^22.3.0",
     "@angular/language-service": "^22.3.0",
     "@types/jasmine": "~3.6.2",
-    "@types/node": "~14.14.10",
+    "@types/node": "^24.15.0",
     "gh-pages": "^3.1.0",
     "istanbul-lib-instrument": "^6.0.3",
-    "jasmine-core": "~4.5.0",
     "jasmine-spec-reporter": "~7.0.0",
-    "karma": "6.4.1",
-    "karma-chrome-launcher": "~3.1.0",
-    "karma-coverage": "2.1.1",
-    "karma-firefox-launcher": "~2.1.2",
-    "karma-jasmine": "~5.1.0",
-    "karma-jasmine-html-reporter": "~2.0.0",
+    "jsdom": "^31.0.1",
     "queue": "^6.0.1",
     "topojson": "^3.0.2",
     "ts-node": "~9.1.0",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.1"
   }
 }

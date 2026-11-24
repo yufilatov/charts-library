@@ -13,8 +13,6 @@ import { BarHorizontalSeriesChartService } from './bar-series-horizontal.service
         BarVerticalSeriesChartService,
         BarHorizontalSeriesChartService,
     ],
-    changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: true
 })
 export class BarSeriesChartComponent {
     data = input<any[]>();
@@ -35,14 +33,14 @@ export class BarSeriesChartComponent {
     private readonly disposable = inject(ChartDisposable);
 
     constructor() {
-        effect(() => this.invalidate());
-        const rectChange = this.chart.rectChange.subscribe(() => this.invalidate());
+        effect(() => this.invalidate(this.data()));
+        const rectChange = this.chart.rectChange.subscribe(() => this.invalidate(this.data()));
 
         this.disposable.add(() => rectChange.unsubscribe());
     }
 
 
-    private invalidate() {
+    private invalidate(d: any): void {
         const service = this.orientation() === 'vertical' ? this.seriesServiceVertical : this.seriesServiceHorizontal;
 
         const state = service.setState({

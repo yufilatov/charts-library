@@ -1,59 +1,30 @@
-<div class="header">
-    <a class="logo">D3-Chart-Library</a>
-    <div class="header-right">
-        <div>
-            @for(page of pages; track page) {
-                <a [routerLink]="page">{{ page }}</a>
-            }
-        </div>
-    </div>
+<header class="header">
+    <a class="logo">
+        <span class="logo-mark" aria-hidden="true">
+            <svg viewBox="0 0 32 32" width="22" height="22">
+                <rect x="3" y="16" width="6" height="12" rx="1.5" fill="currentColor" opacity="0.5" />
+                <rect x="13" y="9" width="6" height="19" rx="1.5" fill="currentColor" opacity="0.78" />
+                <rect x="23" y="4" width="6" height="24" rx="1.5" fill="currentColor" />
+            </svg>
+        </span>
+        <span class="logo-copy">
+            <span class="logo-title">D3-Chart-Library</span>
+            <span class="logo-kicker">Interactive examples</span>
+        </span>
+    </a>
+    <nav class="header-nav" aria-label="Pages">
+        @for (page of pages; track page) {
+            <a [routerLink]="page" routerLinkActive="active">{{ page }}</a>
+        }
+    </nav>
+</header>
+
+<div class="season-bar">
+    <app-season-select></app-season-select>
 </div>
 
 <div class="main">
-    <nav class="navigation" aria-label="Chart examples">
-        <div class="nav-search-wrap">
-            <input
-                type="search"
-                class="nav-search"
-                placeholder="Search charts"
-                aria-label="Search charts"
-                [value]="search"
-                (input)="onSearch($event)"
-            />
-            @if (search) {
-                <button type="button" class="nav-clear" aria-label="Clear search" (click)="clearSearch()">
-                    ×
-                </button>
-            }
-        </div>
-        <div class="nav-scroll">
-            @for (group of filteredGroups; track group.id) {
-                <section class="nav-group">
-                    <button
-                        type="button"
-                        class="nav-group-toggle"
-                        [attr.aria-expanded]="isExpanded(group.id)"
-                        (click)="toggleGroup(group.id)"
-                    >
-                        <span>{{ group.title }}</span>
-                        <span class="nav-chevron" [class.open]="isExpanded(group.id)" aria-hidden="true"></span>
-                    </button>
-                    @if (isExpanded(group.id)) {
-                        <ul>
-                            @for (item of group.items; track item.path) {
-                                <li>
-                                    <a [routerLink]="item.path" routerLinkActive="active">{{ item.label }}</a>
-                                </li>
-                            }
-                        </ul>
-                    }
-                </section>
-            }
-            @if (filteredGroups.length === 0) {
-                <p class="nav-empty">No charts match</p>
-            }
-        </div>
-    </nav>
+    <app-menu></app-menu>
     <div class="view">
         <router-outlet></router-outlet>
     </div>

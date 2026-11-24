@@ -1,18 +1,21 @@
-import { Component, OnInit, ViewChild, ElementRef, inject } from '@angular/core';
-import { AsyncPipe, NgClass, UpperCasePipe } from '@angular/common';
-import { FormsModule } from '@angular/forms';
-import { ChartStyleBuilder } from 'src/components/chart-style/chart-style.builder';
-import { ChartStyle } from 'src/components/chart-style/chart-style';
-import { Observable, empty } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
+import { catchError, distinctUntilChanged, filter, map, shareReplay, switchMap } from 'rxjs/operators';
+import { Component, OnInit, inject } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { appFeature } from 'src/app/state/app.feature';
 import { ExampleDataService } from '../data-service';
+import { ChartStyle } from 'src/components/chart-style/chart-style';
+import { ChartStyleBuilder } from 'src/components/chart-style/chart-style.builder';
 import { getSumFromObjectValues } from 'src/components/kit';
+import { AsyncPipe, NgClass } from '@angular/common';
 import { ChartComponent } from 'src/components/chart/chart.component';
 import { BarSeriesChartComponent } from 'src/components/series/bar-series/bar-series.component';
-import { GridSeriesChartComponent } from 'src/components/series/grid-series/grid-series.component';
+import { GridSeriesChartComponent, Range } from 'src/components/series/grid-series/grid-series.component';
 import { XAxisChartComponent } from 'src/components/x-axis/x-axis.component';
 import { YAxisChartComponent } from 'src/components/y-axis/y-axis.component';
 import { ChartPlotComponent } from 'src/components/chart-plot/chart-plot.component';
+
+type GoalsMode = 'for' | 'against';
 
 @Component({
     selector: 'app-example-chart-bar-vertical',
@@ -21,12 +24,9 @@ import { ChartPlotComponent } from 'src/components/chart-plot/chart-plot.compone
         './example-chart-bar-vertical-series.component.scss',
         '../../styles/epl-emblems.scss',
     ],
-    providers: [ExampleDataService],
     imports: [
         AsyncPipe,
-        UpperCasePipe,
         NgClass,
-        FormsModule,
         ChartComponent,
         BarSeriesChartComponent,
         GridSeriesChartComponent,
@@ -35,37 +35,47 @@ import { ChartPlotComponent } from 'src/components/chart-plot/chart-plot.compone
         ChartPlotComponent,
     ],
 })
-
 export class ExampleChartBarVerticalSeriesComponent implements OnInit {
-    @ViewChild('inputScored', { static: true }) inputScored: ElementRef;
-    @ViewChild('inputConceded', { static: true }) inputConceded: ElementRef;
-
-    data$: Observable<any>;
-    clubs$: Observable<any>;
-
-    margin = { left: 30, bottom: 25, right: 20, top: 0 };
-    range = { x: [0, 21], y: [0, 130] };
+    margin = { left: 30, bottom: 20, right: 20, top: 0 };
+    range: Range = { x: [0, 21], y: [0, 100] };
     gridStep = { x: 0, y: 5 };
 
     ticksX = [];
     ticksY = [];
 
-    seasons = [27, 26, 25, 24, 23, 20, 19, 18, 17, 16, 15];
     sorts = ['Position', 'Name', 'Goals Ascending', 'Goals Descending'];
 
-    colors = ['#709a28', '#87ba30', '#c23612', '#e0471f'];
+    colors = ['#709a28', '#87ba30'];
+    goalsMode: GoalsMode = 'for';
 
-    sortBy;
-    selectedSeason = 19;
+    sortBy = (a, b) => a.points != null && b.points != null ? b.points - a.points : (a.position ?? 0) - (b.position ?? 0);
     selectedSortBy = 'Position';
+    openMenu: 'sort' | null = null;
 
     private readonly dataService = inject(ExampleDataService);
+    private readonly store = inject(Store);
+    private readonly goals$ = new BehaviorSubject<GoalsMode>('for');
+    private readonly resort$ = new BehaviorSubject(0);
+
+    private readonly clubsSource$ = this.store.select(appFeature.selectSelectedSeason).pipe(
+        filter((season): season is string => !!season),
+        distinctUntilChanged(),
+        switchMap(season => this.dataService.getData(season).pipe(
+            catchError(() => of([])),
+        )),
+        shareReplay({ bufferSize: 1, refCount: true }),
+    );
+
+    clubs$: Observable<any> = combineLatest([this.clubsSource$, this.goals$, this.resort$]).pipe(
+        map(([clubs]) => clubs.slice().sort(this.sortBy)),
+    );
+
+    data$: Observable<any> = combineLatest([this.clubsSource$, this.goals$, this.resort$]).pipe(
+        map(([clubs, goals]) => this.toSeries(clubs, goals)),
+    );
 
     style = new ChartStyleBuilder()
-        .for(ChartStyle.bar, (d, i) => {
-
-            return { fill: this.colors[i], background: '#f1f3ca', size: 30 };
-        })
+        .for(ChartStyle.bar, (d, i) => ({ fill: this.colors[i], background: '#f1f3ca', size: 25 }))
         .for(ChartStyle.label, (d) => {
             const text = `${d}%`;
 
@@ -73,12 +83,9 @@ export class ExampleChartBarVerticalSeriesComponent implements OnInit {
         });
 
     gridStyle = new ChartStyleBuilder()
-        .for(ChartStyle.line, (d, i) => {
+        .for(ChartStyle.line, (d, i) => ({ stroke: '#C0C0C0', strokeDasharray: '1 1' }));
 
-            return { stroke: '#C0C0C0', strokeDasharray: '1 1' };
-        });
-
-    ngOnInit() {
+    ngOnInit(): void {
         for (let i = 1; i < Math.max(...this.range.x); i++) {
             this.ticksX.push(i);
         }
@@ -88,99 +95,70 @@ export class ExampleChartBarVerticalSeriesComponent implements OnInit {
         }
 
         this.onSortChange();
-        this.requestData('for');
     }
 
-    onSeasonChange() {
-        this.requestClubs();
+    toggleMenu(menu: 'sort') {
+        this.openMenu = this.openMenu === menu ? null : menu;
+    }
+
+    chooseSort(sort: string) {
+        this.selectedSortBy = sort;
+        this.openMenu = null;
+        this.refresh();
     }
 
     onSortChange() {
         switch (this.selectedSortBy) {
-            case 'Name':
-            default: {
+            case 'Name': {
                 this.sortBy = (a, b) => a.club.localeCompare(b.club);
                 break;
             }
             case 'Position': {
-                this.sortBy = (a, b) => a.points != null && b.points != null ? b.points - a.points : a.position - b.position;
+                this.sortBy = (a, b) => a.points != null && b.points != null ? b.points - a.points : (a.position ?? 0) - (b.position ?? 0);
                 break;
             }
             case 'Goals Descending': {
-                if (this.inputScored.nativeElement.checked && this.inputConceded.nativeElement.checked) {
-                    this.sortBy = (a, b) => getSumFromObjectValues(a.goals.for, a.goals.against) - getSumFromObjectValues(b.goals.for, b.goals.against);
-                } else if (this.inputScored.nativeElement.checked) {
-                    this.sortBy = (a, b) => getSumFromObjectValues(a.goals.for) - getSumFromObjectValues(b.goals.for);
-                } else if (this.inputConceded.nativeElement.checked) {
-                    this.sortBy = (a, b) => getSumFromObjectValues(a.goals.against) - getSumFromObjectValues(b.goals.against);
-                }
+                this.sortBy = this.goalsMode === 'for'
+                    ? (a, b) => getSumFromObjectValues(a.goals.for) - getSumFromObjectValues(b.goals.for)
+                    : (a, b) => getSumFromObjectValues(a.goals.against) - getSumFromObjectValues(b.goals.against);
                 break;
             }
             case 'Goals Ascending': {
-                if (this.inputScored.nativeElement.checked && this.inputConceded.nativeElement.checked) {
-                    this.sortBy = (a, b) => getSumFromObjectValues(b.goals.for, b.goals.against) - getSumFromObjectValues(a.goals.for, a.goals.against);
-                } else if (this.inputScored.nativeElement.checked) {
-                    this.sortBy = (a, b) => getSumFromObjectValues(b.goals.for) - getSumFromObjectValues(a.goals.for);
-                } else if (this.inputConceded.nativeElement.checked) {
-                    this.sortBy = (a, b) => getSumFromObjectValues(b.goals.against) - getSumFromObjectValues(a.goals.against);
-                }
+                this.sortBy = this.goalsMode === 'for'
+                    ? (a, b) => getSumFromObjectValues(b.goals.for) - getSumFromObjectValues(a.goals.for)
+                    : (a, b) => getSumFromObjectValues(b.goals.against) - getSumFromObjectValues(a.goals.against);
+                break;
+            }
+            default: {
+                this.sortBy = (a, b) => a.club.localeCompare(b.club);
                 break;
             }
         }
-
-        this.requestClubs();
     }
 
-    requestData(goals: 'for' | 'against' | 'both') {
-        this.data$ = this.dataService.getData(`${this.selectedSeason - 1}${this.selectedSeason}`)
-            .pipe(map(x => x
-                .sort(this.sortBy)
-                .map(club =>
-                    goals === 'for' ? [club.goals.for.home, club.goals.for.away] :
-                        goals === 'against' ? [club.goals.against.home, club.goals.against.away] :
-                            [club.goals.for.home, club.goals.for.away, club.goals.against.home, club.goals.against.away])
-            ));
+    selectGoals(goals: GoalsMode): void {
+        this.goalsMode = goals;
+        this.colors = goals === 'for'
+            ? ['#709a28', '#87ba30']
+            : ['#c23612', '#e0471f'];
+        this.refresh();
     }
 
-    requestClubs() {
-        this.clubs$ = this.dataService.getData(`${this.selectedSeason - 1}${this.selectedSeason}`)
-            .pipe(map(data => data
-                .sort(this.sortBy)
-                .map(club => club)
-            ));
+    private refresh(): void {
+        this.onSortChange();
+        this.goals$.next(this.goalsMode);
+        this.resort$.next(this.resort$.value + 1);
     }
 
-    updateData(scored = true, conceded = false) {
-        if (scored && conceded) {
-            this.colors = ['#709a28', '#87ba30', '#c23612', '#e0471f'];
-
-            this.onSortChange();
-            this.requestData('both');
-        } else {
-            if (scored) {
-                this.colors = ['#709a28', '#87ba30'];
-
-                this.onSortChange();
-                this.requestData('for');
-            } else {
-                if (conceded) {
-                    this.colors = ['#c23612', '#e0471f'];
-
-                    this.onSortChange();
-                    this.requestData('against');
-                } else {
-                    this.data$ = empty();
-                    this.clubs$ = empty();
-                }
-            }
-        }
-    }
-
-    getSeason(season) {
-        return `20${season - 1}/20${season}`;
-    }
-
-    getLogo(club) {
+    getLogo(club): string {
         return `logo logo-${club.replace(/\s+/g, '-').toLowerCase()}`;
+    }
+
+    private toSeries(clubs: any[], goals: GoalsMode) {
+        return clubs.slice().sort(this.sortBy).map(club =>
+            goals === 'for'
+                ? [club.goals.for.home, club.goals.for.away]
+                : [club.goals.against.home, club.goals.against.away],
+        );
     }
 }

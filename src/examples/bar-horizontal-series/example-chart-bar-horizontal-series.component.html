@@ -4,29 +4,6 @@
 
 <div class="toolbar">
     <div class="field">
-        <span class="field-label">Premier League season</span>
-        <div class="select" [class.open]="openMenu === 'season'">
-            <button type="button" class="select-trigger" aria-haspopup="listbox"
-                [attr.aria-expanded]="openMenu === 'season'" (click)="toggleMenu('season')">
-                <span>{{ getSeason(selectedSeason) }}</span>
-                <span class="chevron" aria-hidden="true"></span>
-            </button>
-            @if (openMenu === 'season') {
-                <ul class="select-menu" role="listbox">
-                    @for (season of seasons; track season) {
-                        <li>
-                            <button type="button" role="option" [class.active]="season === selectedSeason"
-                                [attr.aria-selected]="season === selectedSeason" (click)="chooseSeason(season)">
-                                {{ getSeason(season) }}
-                            </button>
-                        </li>
-                    }
-                </ul>
-            }
-        </div>
-    </div>
-
-    <div class="field">
         <span class="field-label">Sort by</span>
         <div class="select sort" [class.open]="openMenu === 'sort'">
             <button type="button" class="select-trigger" aria-haspopup="listbox"
@@ -51,15 +28,15 @@
 
     <div class="field">
         <span class="field-label">Goals</span>
-        <div class="toggles">
+        <div class="toggles" role="radiogroup" aria-label="Goals">
             <label class="toggle">
-                <input #inputScored type="checkbox" checked
-                    (change)="updateData(inputScored.checked, inputConceded.checked)">
+                <input type="radio" name="bar-goals" value="for" [checked]="goalsMode === 'for'"
+                    (change)="selectGoals('for')">
                 <span>Scored</span>
             </label>
             <label class="toggle">
-                <input #inputConceded type="checkbox"
-                    (change)="updateData(inputScored.checked, inputConceded.checked)">
+                <input type="radio" name="bar-goals" value="against" [checked]="goalsMode === 'against'"
+                    (change)="selectGoals('against')">
                 <span>Conceded</span>
             </label>
         </div>
@@ -69,8 +46,8 @@
 <div class="container">
     <div class="logos">
         <div class="logo-plot">
-            @for (club of clubs$ | async; track club.club; let i = $index) {
-                <div class="logo" [ngClass]="getLogo(club.club)" [style.top]="'calc((' + (i + 1) + ' / 21) * 100% - 12.5px)'"></div>
+            @for (team of data$ | async; track team.club) {
+                <div class="logo" [ngClass]="getLogo(team.club)" [style.top]="'calc((' + ($index + 1) + ' / 21) * 100% - 12.5px)'"></div>
             }
         </div>
     </div>
@@ -79,7 +56,7 @@
         <app-chart-series
             type="bar"
             orientation="horizontal"
-            [data]="data$ | async"
+            [data]="chartData$ | async"
             [style]="style"
             [range]="range"
         ></app-chart-series>

@@ -4,29 +4,6 @@
 
 <div class="toolbar">
     <div class="field">
-        <span class="field-label">Premier League season</span>
-        <div class="select" [class.open]="openMenu === 'season'">
-            <button type="button" class="select-trigger" aria-haspopup="listbox"
-                [attr.aria-expanded]="openMenu === 'season'" (click)="toggleMenu('season')">
-                <span>{{ getSeason(selectedSeason) }}</span>
-                <span class="chevron" aria-hidden="true"></span>
-            </button>
-            @if (openMenu === 'season') {
-                <ul class="select-menu" role="listbox">
-                    @for (season of seasons; track season) {
-                        <li>
-                            <button type="button" role="option" [class.active]="season === selectedSeason"
-                                [attr.aria-selected]="season === selectedSeason" (click)="chooseSeason(season)">
-                                {{ getSeason(season) }}
-                            </button>
-                        </li>
-                    }
-                </ul>
-            }
-        </div>
-    </div>
-
-    <div class="field">
         <span class="field-label">Progress day by day</span>
         <div class="select" [class.open]="openMenu === 'chart'">
             <button type="button" class="select-trigger" aria-haspopup="listbox"

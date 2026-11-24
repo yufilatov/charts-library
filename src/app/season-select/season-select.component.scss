@@ -1,0 +1,116 @@
+:host {
+    position: relative;
+    z-index: 30;
+    display: block;
+    width: fit-content;
+}
+
+.field {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.field-label {
+    display: block;
+    margin-bottom: 0;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #3d5c4c;
+}
+
+.select {
+    position: relative;
+    width: 180px;
+
+    &.open {
+        z-index: 30;
+    }
+}
+
+.select-trigger {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 18px;
+    padding: 10px 14px;
+    border: 1px solid #d5e4cc;
+    border-radius: 12px;
+    background: linear-gradient(180deg, #ffffff 0%, #f3f8ee 100%);
+    color: #1c2b22;
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(70, 110, 50, 0.12), inset 0 1px 0 #fff;
+
+    &:hover,
+    .open & {
+        border-color: #87ba30;
+    }
+}
+
+.chevron {
+    width: 0;
+    height: 0;
+    flex: 0 0 auto;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #709a28;
+    transition: transform 0.16s ease;
+}
+
+.select.open .chevron {
+    transform: rotate(180deg);
+}
+
+.select-menu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 1;
+    margin: 0;
+    padding: 6px;
+    list-style: none;
+    max-height: 280px;
+    overflow: auto;
+    border: 1px solid #d5e4cc;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 16px 36px rgba(70, 110, 50, 0.16);
+
+    button {
+        width: 100%;
+        padding: 8px 10px;
+        border: 0;
+        border-radius: 8px;
+        background: transparent;
+        color: #1c2b22;
+        font: inherit;
+        font-size: 14px;
+        text-align: left;
+        cursor: pointer;
+
+        &:hover {
+            background: #eef6e4;
+        }
+
+        &.active {
+            background: linear-gradient(90deg, #87ba30, #709a28);
+            color: #111;
+            font-weight: 600;
+        }
+    }
+}
+
+.select-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    cursor: default;
+}

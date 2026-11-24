@@ -1,0 +1,46 @@
+<nav class="navigation" aria-label="Chart examples">
+    <div class="nav-search-wrap">
+        <input
+            type="search"
+            class="nav-search"
+            placeholder="Search charts"
+            aria-label="Search charts"
+            [value]="search"
+            (input)="onSearch($event)" />
+        @if (search) {
+            <button
+                type="button"
+                class="nav-clear"
+                aria-label="Clear search"
+                (click)="clearSearch()"
+            >×</button>
+        }
+    </div>
+    <div class="nav-scroll">
+        @for (group of filteredGroups; track group.id) {
+            <section class="nav-group">
+                <button
+                    type="button"
+                    class="nav-group-toggle"
+                    [attr.aria-expanded]="isExpanded(group.id)"
+                    (click)="toggleGroup(group.id)"
+                >
+                    <span>{{ group.title }}</span>
+                    <span class="nav-chevron" [class.open]="isExpanded(group.id)" aria-hidden="true"></span>
+                </button>
+                @if (isExpanded(group.id)) {
+                <ul>
+                    @for (item of group.items; track item.path) {
+                        <li>
+                            <a [routerLink]="item.path" routerLinkActive="active">{{ item.label }}</a>
+                        </li>
+                    }
+                </ul>
+                }
+            </section>
+        }
+        @if (filteredGroups.length === 0) {
+        <p class="nav-empty">No charts match</p>
+        }
+    </div>
+</nav>

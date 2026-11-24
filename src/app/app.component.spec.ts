@@ -1,6 +1,8 @@
 import { TestBed, waitForAsync } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideState, provideStore } from '@ngrx/store';
 import { AppComponent } from './app.component';
+import { appFeature } from './state/app.feature';
 
 describe('AppComponent', () => {
   beforeEach(waitForAsync(() => {
@@ -10,6 +12,8 @@ describe('AppComponent', () => {
       ],
       providers: [
         provideRouter([]),
+        provideStore(),
+        provideState(appFeature),
       ],
     }).compileComponents();
   }));

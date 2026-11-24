@@ -16,32 +16,30 @@ import { ChartDisposable } from '../../common/chart-disposable';
     standalone: true
 })
 export class BarSimpleSeriesChartComponent {
-  data = input<any[]>();
-  style = input(new ChartStyleBuilder());
-  total = input(100);
-  animation = input(false);
+    data = input<any[]>();
+    style = input(new ChartStyleBuilder());
+    animation = input(false);
 
-  private readonly chart = inject(ChartComponent);
-  private readonly seriesService = inject(BarSimpleSeriesChartService);
-  private readonly disposable = inject(ChartDisposable);
+    private readonly chart = inject(ChartComponent);
+    private readonly seriesService = inject(BarSimpleSeriesChartService);
+    private readonly disposable = inject(ChartDisposable);
 
-  constructor() {
-    const rectChange = this.chart.rectChange.subscribe(() => this.invalidate());
-    this.disposable.add(() => rectChange.unsubscribe());
-    effect(() => this.invalidate());
-  }
+    constructor() {
+        const rectChange = this.chart.rectChange.subscribe(() => this.invalidate());
+        this.disposable.add(() => rectChange.unsubscribe());
+        effect(() => this.invalidate());
+    }
 
-  private invalidate() {
-    const state = this.seriesService.setState({
-      data: this.data() || [],
-      style: this.style(),
-      rect: this.chart.rect,
-      margin: this.chart.margin(),
-      total: this.total(),
-      animation: this.animation(),
-    });
+    private invalidate(): void {
+        const state = this.seriesService.setState({
+            data: this.data() || [],
+            style: this.style(),
+            rect: this.chart.rect,
+            margin: this.chart.margin(),
+            animation: this.animation(),
+        });
 
-    this.chart.addSeries(state);
-    this.disposable.add(() => this.chart.removeSeries(state));
-  }
+        this.chart.addSeries(state);
+        this.disposable.add(() => this.chart.removeSeries(state));
+    }
 }

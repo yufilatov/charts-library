@@ -1,0 +1,26 @@
+@if (open) {
+    <button type="button" class="select-backdrop" aria-label="Close menu" (click)="open = false"></button>
+}
+
+<div class="field">
+    <span class="field-label">Premier League season</span>
+    <div class="select" [class.open]="open">
+        <button type="button" class="select-trigger" aria-haspopup="listbox"
+            [attr.aria-expanded]="open" (click)="toggle()">
+            <span>{{ formatSeason(selectedSeason()) }}</span>
+            <span class="chevron" aria-hidden="true"></span>
+        </button>
+        @if (open) {
+            <ul class="select-menu" role="listbox">
+                @for (season of seasons; track season) {
+                    <li>
+                        <button type="button" role="option" [class.active]="season === selectedSeason()"
+                            [attr.aria-selected]="season === selectedSeason()" (click)="choose(season)">
+                            {{ season }}
+                        </button>
+                    </li>
+                }
+            </ul>
+        }
+    </div>
+</div>

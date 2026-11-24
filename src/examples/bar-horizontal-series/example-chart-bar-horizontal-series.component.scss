@@ -152,7 +152,7 @@
         height: 16px;
         margin: 0;
         border: 1px solid #c5d6bc;
-        border-radius: 4px;
+        border-radius: 50%;
         background: #fff;
         display: grid;
         place-content: center;
@@ -161,19 +161,18 @@
         &::after {
             content: '';
             width: 8px;
-            height: 4px;
-            border-left: 2px solid transparent;
-            border-bottom: 2px solid transparent;
-            transform: rotate(-45deg) translateY(-1px);
+            height: 8px;
+            border-radius: 50%;
+            background: transparent;
         }
 
         &:checked {
             border-color: #87ba30;
-            background: linear-gradient(90deg, #87ba30, #709a28);
+            background: #fff;
         }
 
         &:checked::after {
-            border-color: #111;
+            background: #709a28;
         }
     }
 }

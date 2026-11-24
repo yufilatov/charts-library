@@ -1,9 +1,12 @@
-import { Component, OnInit, ChangeDetectionStrategy, inject } from "@angular/core";
+import { Component, DestroyRef, OnInit, ChangeDetectionStrategy, inject } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { Store } from "@ngrx/store";
 import { ChartStyle } from "src/components/chart-style/chart-style";
 import { ChartStyleBuilder } from "src/components/chart-style/chart-style.builder";
 import { Observable, Subscription } from "rxjs";
 import { ExampleDataService } from "../data-service";
-import { map } from "rxjs/operators";
+import { distinctUntilChanged, filter, map } from "rxjs/operators";
+import { appFeature } from "src/app/state/app.feature";
 import { ChartDisposable } from "src/components/common/chart-disposable";
 import { ChartComponent } from "src/components/chart/chart.component";
 import { BarSimpleSeriesChartComponent } from "src/components/series/bar-simple-series/bar-simple-series.component";
@@ -19,6 +22,7 @@ import { AsyncPipe } from '@angular/common';
 export class ExampleChartBarSimpleSeriesComponent implements OnInit {
     prevDuration = 0;
     selectedSeason = 27;
+    seasonLabel = "2026/2027";
 
     dataFor$: Observable<any>;
     dataAgainst$: Observable<any>;
@@ -27,6 +31,8 @@ export class ExampleChartBarSimpleSeriesComponent implements OnInit {
 
     private readonly dataService = inject(ExampleDataService);
     private readonly disposable = inject(ChartDisposable);
+    private readonly store = inject(Store);
+    private readonly destroyRef = inject(DestroyRef);
 
     styleFor = new ChartStyleBuilder()
         .for(ChartStyle.bar, (d, i) => {
@@ -59,35 +65,47 @@ export class ExampleChartBarSimpleSeriesComponent implements OnInit {
         });
 
     ngOnInit() {
-        this.dataFor$ = this.dataService
-            .getData(`${this.selectedSeason - 1}${this.selectedSeason}`)
-            .pipe(
-                map((data) =>
-                    data.map((club) => [
-                        club.goals.for.home,
-                        club.goals.for.away,
-                        100 - club.goals.for.home - club.goals.for.away,
-                    ]),
-                ),
-            );
+        this.disposable.add(() => this.clubs$?.unsubscribe());
+        this.store.select(appFeature.selectSelectedSeason).pipe(
+            distinctUntilChanged(),
+            takeUntilDestroyed(this.destroyRef),
+        ).subscribe(season => this.loadSeason(season));
+    }
 
-        this.dataAgainst$ = this.dataService
-            .getData(`${this.selectedSeason - 1}${this.selectedSeason}`)
-            .pipe(
-                map((data) =>
-                    data.map((club) => [
-                        club.goals.against.home,
-                        club.goals.against.away,
-                        100 - club.goals.against.home - club.goals.against.away,
-                    ]),
-                ),
-            );
+    private loadSeason(season: string) {
+        // this.selectedSeason = season;
+        // this.seasonLabel = `20${season - 1}/20${season}`;
+        // const seasonKey = `${season - 1}${season}`;
 
-        this.clubs$ = this.dataService
-            .getData(`${this.selectedSeason - 1}${this.selectedSeason}`)
-            .pipe(map((data) => data.map((club) => club.club)))
-            .subscribe((data) => (this.clubs = data));
+        // this.clubs$?.unsubscribe();
 
-        this.disposable.add(() => this.clubs$.unsubscribe());
+        // this.dataFor$ = this.dataService
+        //     .getData(seasonKey)
+        //     .pipe(
+        //         map((data) =>
+        //             data.map((club) => [
+        //                 club.goals.for.home,
+        //                 club.goals.for.away,
+        //                 100 - club.goals.for.home - club.goals.for.away,
+        //             ]),
+        //         ),
+        //     );
+
+        // this.dataAgainst$ = this.dataService
+        //     .getData(seasonKey)
+        //     .pipe(
+        //         map((data) =>
+        //             data.map((club) => [
+        //                 club.goals.against.home,
+        //                 club.goals.against.away,
+        //                 100 - club.goals.against.home - club.goals.against.away,
+        //             ]),
+        //         ),
+        //     );
+
+        // this.clubs$ = this.dataService
+        //     .getData(seasonKey)
+        //     .pipe(map((data) => data.map((club) => club.club)))
+        //     .subscribe((data) => (this.clubs = data));
     }
 }

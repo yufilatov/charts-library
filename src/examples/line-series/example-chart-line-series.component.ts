@@ -1,4 +1,8 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { Component, ChangeDetectionStrategy, DestroyRef, OnInit, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Store } from '@ngrx/store';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { appFeature } from 'src/app/state/app.feature';
 import { ChartStyleBuilder } from 'src/components/chart-style/chart-style.builder';
 import { ChartStyle } from 'src/components/chart-style/chart-style';
 import { DATA19, DATA20 } from './data';
@@ -19,14 +23,15 @@ export class ExampleChartLineSeriesComponent implements OnInit {
     COLORS = COLORS_EPL;
     DATA = DATA19;
 
-    seasons = [27, 26, 25, 24, 23, 20, 19, 18, 17, 15, 16];
-    selectedSeason = 27;
     charts = [
         { value: 'position', label: 'Position' },
         { value: 'points', label: 'Points' },
     ];
     selectedChart: 'position' | 'points' = 'position';
-    openMenu: 'season' | 'chart' | null = null;
+    openMenu: 'chart' | null = null;
+
+    private readonly store = inject(Store);
+    private readonly destroyRef = inject(DestroyRef);
 
     data = [];
     range = { x: [], y: {} };
@@ -47,24 +52,20 @@ export class ExampleChartLineSeriesComponent implements OnInit {
         });
 
     ngOnInit() {
-        this.onSeasonChange('19');
         this.onChartChange('position');
         this.zones = [[0, 4.5], [4.5, 6.5], [6.5, 7.5], [7.5, 17.5], [17.5, 21]];
-
+        this.store.select(appFeature.selectSelectedSeason).pipe(
+            distinctUntilChanged(),
+            takeUntilDestroyed(this.destroyRef),
+        ).subscribe(season => this.onSeasonChange(String(season)));
     }
 
     get chartLabel() {
         return this.charts.find(chart => chart.value === this.selectedChart).label;
     }
 
-    toggleMenu(menu: 'season' | 'chart') {
+    toggleMenu(menu: 'chart') {
         this.openMenu = this.openMenu === menu ? null : menu;
-    }
-
-    chooseSeason(season: number) {
-        this.selectedSeason = season;
-        this.openMenu = null;
-        this.onSeasonChange(String(season));
     }
 
     chooseChart(chart: 'position' | 'points') {
@@ -220,10 +221,6 @@ export class ExampleChartLineSeriesComponent implements OnInit {
 
     format(name) {
         return `form-check form-check-${name.toLowerCase().replace(/[&, \s]/g, '')}`;
-    }
-
-    getSeason(season) {
-        return `20${season - 1}/20${season}`;
     }
 
 }

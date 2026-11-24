@@ -22,13 +22,13 @@ interface SeasonRawData {
     info: string;
     data: SeasonData[];
 }
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class ExampleDataService {
     private readonly http = inject(HttpClient);
 
     getData(season: string): Observable<SeasonData[]> {
         return this.http
-            .get<SeasonRawData>(`assets/epl${season}.json`)
+            .get<SeasonRawData>(`assets/epl${season.replace(/\//g, '')}.json`)
             .pipe(map(data => data.data));
     }
 

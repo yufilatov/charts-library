@@ -68,6 +68,9 @@
                   "maximumError": "10kb"
                 }
               ]
+            },
+            "testing": {
+              "preserveSymlinks": true
             }
           },
           "defaultConfiguration": ""
@@ -91,23 +94,20 @@
           }
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular/build:unit-test",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": [
-              "src/polyfills.ts"
-            ],
+            "buildTarget": "charts-library:build:testing",
             "tsConfig": "tsconfig.spec.json",
-            "karmaConfig": "karma.conf.js",
-            "assets": [
-              "src/favicon.ico",
-              "src/assets",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing",
+              "zone.js/plugins/vitest-patch"
             ],
-            "styles": [
-              "src/styles.scss"
-            ],
-            "scripts": [],
-            "preserveSymlinks": true
+            "coverageReporters": [
+              "html",
+              "lcovonly",
+              "text-summary"
+            ]
           }
         }
       }
