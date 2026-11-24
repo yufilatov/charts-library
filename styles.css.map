@@ -1,1 +1,0 @@
-{"version":3,"file":"styles.css","mappings":";;;AACA;EACI;EACA;AAAJ,C","sources":["./src/styles.scss"],"sourcesContent":["\r\n:host {\r\n    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;\r\n    letter-spacing: 1px;\r\n}"],"names":[],"sourceRoot":"webpack:///","x_google_ignoreList":[]}
