@@ -169,7 +169,7 @@ export abstract class ChartStyle {
             key: 'label',
             color: '#000',
             colorHover: '#d62020',
-            fontFamily: 'Calibri',
+            fontFamily: 'Basic',
             fontSize: 10,
             fontWeight: '400',
             backgroundColor: 'transparent',

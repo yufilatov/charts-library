@@ -68,9 +68,11 @@
 
 <div class="container">
     <div class="logos">
-        @for (club of clubs$ | async; track club.club) {
-            <div [ngClass]="getLogo(club.club)"></div>
-        }
+        <div class="logo-plot">
+            @for (club of clubs$ | async; track club.club; let i = $index) {
+                <div class="logo" [ngClass]="getLogo(club.club)" [style.top]="'calc((' + (i + 1) + ' / 21) * 100% - 12.5px)'"></div>
+            }
+        </div>
     </div>
 
     <app-chart>

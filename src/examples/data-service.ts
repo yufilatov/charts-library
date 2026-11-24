@@ -22,7 +22,7 @@ interface SeasonRawData {
     info: string;
     data: SeasonData[];
 }
-@Injectable()
+@Injectable({providedIn: 'root'})
 export class ExampleDataService {
     private readonly http = inject(HttpClient);
 
