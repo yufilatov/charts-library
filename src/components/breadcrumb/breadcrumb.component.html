@@ -1,13 +1,13 @@
 <ul>
-    <li (click)="select(path[0])">
-        <div [ngClass]="'chart-breadcrumb-icon ' + icon"></div>
+    <li (click)="select(path()[0])">
+        <div [ngClass]="'chart-breadcrumb-icon ' + icon()"></div>
     </li>
     @for(part of path(); track part) {
-        @if(format(part)) {
+        @if(format()(part)) {
             <li size="sm" weight="strong" [style.color]="getColor($index)">
                 <span kf-text size="xs" weight="strong">/</span>
                 <button (click)="select(part)">
-                    {{ format(part) }}
+                    {{ format()(part) }}
                 </button>
             </li>
         }

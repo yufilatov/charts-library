@@ -18,7 +18,7 @@ export class BreadcrumbChartComponent {
     path = input<any[]>([]);
     style = input(new ChartStyleBuilder());
     icon = input<'sunburst' | 'bubble'>('sunburst');
-    format = (x: any) => '' + x;
+    format = input<(value: any) => string>((value) => '' + value);
     selection = input<any>();
 
     #selection: any;

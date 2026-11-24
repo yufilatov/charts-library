@@ -6,7 +6,7 @@
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",
-    "deploy": "gh-pages -d dist/charts-library"
+    "deploy": "ng build --configuration production && node scripts/prepare-github-pages.js && gh-pages -d dist/charts-library --dotfiles"
   },
   "private": true,
   "dependencies": {

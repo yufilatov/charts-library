@@ -1,11 +1,11 @@
 @mixin club-logo($name) {
-    background-image: url('/assets/images/epl-logos/#{$name}-logo.png');
+    background-image: url('../assets/images/epl-logos/#{$name}-logo.png');
 }
 
 @mixin club-logo-cl($name) {
-    background-image: url('/assets/images/champions-league-logos/#{$name}.png');
+    background-image: url('../assets/images/champions-league-logos/#{$name}.png');
 }
 
 @mixin land-logo($name) {
-    background-image: url('/assets/images/german-lands-logos/#{$name}-logo.png');
+    background-image: url('../assets/images/german-lands-logos/#{$name}-logo.png');
 }

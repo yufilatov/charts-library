@@ -43,6 +43,7 @@
           },
           "configurations": {
             "production": {
+              "baseHref": "/charts-library/",
               "fileReplacements": [
                 {
                   "replace": "src/environments/environment.ts",
